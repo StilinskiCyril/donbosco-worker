@@ -54,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily', 'bug_reports'],
             'ignore_exceptions' => false,
         ],
 
@@ -80,6 +80,14 @@ return [
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
+        ],
+
+        'bug_reports' => [
+            'driver' => 'slack',
+            'url' => env('BUG_LOG_SLACK_WEBHOOK_URL'),
+            'username' => 'Laravel Log',
+            'emoji' => ':anger:',
+            'level' => env('LOG_LEVEL', 'info'),
         ],
 
         'papertrail' => [
@@ -125,6 +133,12 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'stklog' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/stk.log'),
+            'level' => 'info',
         ],
     ],
 
