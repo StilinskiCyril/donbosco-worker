@@ -51,6 +51,14 @@ return [
             'after_commit' => false,
         ],
 
+        'beanstalkd-worker001' => [
+            'driver' => 'beanstalkd',
+            'host' => env('BEANSTALKD_HOST_WORKER001', '127.0.0.1'),
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => 0,
+        ],
+
         'sqs' => [
             'driver' => 'sqs',
             'key' => env('AWS_ACCESS_KEY_ID'),
