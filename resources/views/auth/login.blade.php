@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
     <link href="{{ asset('ui-kit/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('ui-kit/css/icons.css') }}" rel="stylesheet">
-    <title>Admin Login</title>
+    <title>{{ env('APP_NAME') }} | Login</title>
 </head>
 
 <body class="">
@@ -30,7 +30,9 @@
             <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
                 <div class="col mx-auto">
                     <div class="mb-4 text-center">
-                        <img src="{{ asset('ui-kit/images/logo.png') }}" width="180" alt="" />
+                        <a href="{{ route('home.landing') }}">
+                            <img src="{{ asset('ui-kit/images/logo.png') }}" width="180" alt="Logo" />
+                        </a>
                     </div>
                     <div class="card shadow-none">
                         <div class="card-body">

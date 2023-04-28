@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'landingPage'])->name('home.landing');
+
+Auth::routes(['register' => false]);
+
+Route::group([
+    'middleware' => ['auth:web']
+], function () {
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboardPage'])->name('home.dashboard');
+
+    // admin routes
+    Route::middleware(['role:admin'])->prefix('admin')->group(function(){
+        // routes here
+    });
 });
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
