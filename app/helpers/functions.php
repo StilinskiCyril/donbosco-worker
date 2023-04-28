@@ -113,7 +113,7 @@ function validatePhone($phone): array
             $phone = $phoneUtil->format($kenyaNumberProto, PhoneNumberFormat::E164);
             return [
                 'isValid' => $isValid,
-                'phone' => substr($phone, 1)
+                'msisdn' => substr($phone, 1)
             ];
         }
 
