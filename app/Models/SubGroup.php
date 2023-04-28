@@ -2,19 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class SubGroup extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions, SoftDeletes;
+    use HasFactory, SoftDeletes;
+    protected $guarded = ['id'];
 
     protected static function boot(): void
     {
@@ -23,34 +19,10 @@ class User extends Authenticatable
             $uuid->uuid = Str::uuid()->toString();
         });
     }
-
     public function getRouteKeyName(): string
     {
         return 'uuid';
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $guarded = ['id'];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = ['id', 'password','remember_token', 'deleted_at', 'updated_at'];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
     public function scopeFilter($q){
         if (!is_null(request('uuid')) && !empty(request('uuid'))) {
@@ -59,11 +31,8 @@ class User extends Authenticatable
         if (!is_null(request('name')) && !empty(request('name'))) {
             $q->where('name', request('name'));
         }
-        if (!is_null(request('msisdn')) && !empty(request('msisdn'))) {
-            $q->where('msisdn', request('msisdn'));
-        }
-        if (!is_null(request('email')) && !empty(request('email'))) {
-            $q->where('email', request('email'));
+        if (!is_null(request('ministry')) && !empty(request('ministry'))) {
+            $q->where('ministry', request('ministry'));
         }
         if (!is_null(request('start')) && !empty(request('start'))) {
             $q->where('created_at', '>=', request('start'));
@@ -83,5 +52,11 @@ class User extends Authenticatable
             }
         }
         return $q;
+    }
+
+    // load subgroup group
+    public function group(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Group::class);
     }
 }
