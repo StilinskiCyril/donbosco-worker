@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('trans_id')->nullable()->unique();
             $table->dateTime('trans_time')->nullable();
             $table->double('amount')->nullable();
+            $table->string('msisdn')->nullable();
+            $table->string('name')->nullable();
             $table->string('account_no')->nullable()->unique();
             $table->string('business_short_code')->nullable();
             $table->string('third_party_trans_id')->nullable()->unique();

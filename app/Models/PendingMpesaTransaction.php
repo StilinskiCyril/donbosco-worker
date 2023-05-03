@@ -40,6 +40,12 @@ class PendingMpesaTransaction extends Model
         if (!is_null(request('amount')) && !empty(request('amount'))) {
             $q->where('amount', request('amount'));
         }
+        if (!is_null(request('msisdn')) && !empty(request('msisdn'))) {
+            $q->where('msisdn', request('msisdn'));
+        }
+        if (!is_null(request('name')) && !empty(request('name'))) {
+            $q->where('name', 'like', '%'.request('name').'%');
+        }
         if (!is_null(request('account_no')) && !empty(request('account_no'))) {
             $q->where('account_no', request('account_no'));
         }

@@ -39,6 +39,8 @@ class ProcessTransaction implements ShouldQueue
                 'trans_id' => $this->data['content']['TransID'],
                 'trans_time' => Carbon::parse($this->data['content']['TransTime']),
                 'amount' => $this->data['content']['TransAmount'],
+                'msisdn' => $this->data['content']['MSISDN'],
+                'name' => $this->data['content']['FirstName'] .' '. $this->data['content']['LastName'],
                 'account_no' => $this->data['content']['BillRefNumber'],
                 'business_short_code' => $this->data['content']['BusinessShortCode'],
                 'ip' => $this->data['ip']
