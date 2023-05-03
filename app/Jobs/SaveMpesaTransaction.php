@@ -76,9 +76,7 @@ class SaveMpesaTransaction implements ShouldQueue
                 $third_party_trans_id = $result->third_party_trans_id;
                 $account = Account::where('account_no', $account_no)->first();
 
-                //charges and net
-                $amount = $this->data['content']['TransAmount'];
-
+                //calculate charges and net
                 $charges = match ($amount) {
                     $amount >= 101 and $amount <= 999 => 23,
                     $amount >= 1000 and $amount <= 2499 => 34,
