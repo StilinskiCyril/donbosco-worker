@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('unknown_donations', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('name');
-            $table->text('description');
-            $table->double('target_amount');
-            $table->dateTime('target_date');
+            $table->foreignId('pending_mpesa_transaction_id')->constrained()->cascadeOnDelete();
+            $table->string('channel')->nullable();
+            $table->string('msisdn')->nullable();
+            $table->double('amount')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('unknown_donations');
     }
 };

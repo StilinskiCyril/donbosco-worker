@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('mpesa_access_tokens', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('name');
-            $table->text('description');
-            $table->double('target_amount');
-            $table->dateTime('target_date');
+            $table->string('type');
+            $table->string('token');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('mpesa_access_tokens');
     }
 };

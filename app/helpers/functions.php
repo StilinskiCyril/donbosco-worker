@@ -3,101 +3,80 @@
 use App\Models\Account;
 use App\Models\Project;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
-//send contributor confirmation message
-function contributorMessageActivity($BillRefNumber, $MSISDN, $FirstName, $LastName, $TransAmount, $my_total_contributions, $total_account_contributions){
-    //compose message to send to user
-    $msg_to_contributor = '';
-    $project_name = '';
+//send donor confirmation message
+if (!function_exists('donorMessageResponse')){
+    function donorMessageResponse($account_no, $msisdn, $name, $amount, $my_total_contributions, $total_account_contributions){
+        $msg_to_donor = '';
+        $project_name = '';
 
-    $accounts = Account::whereAccountNumber($BillRefNumber)->get();
+        $accounts = Account::where('account_no', $account_no)->get();
 
-    if (count($accounts) < 1){
+        foreach ($accounts as $account){
+            $msg_to_donor = $account->message_to_donor;
+            $project_name = $account->project->name;
+        }
+
+        $search  = array('[1]', '[2]', '[3]', '[7]');
+        $replace = array($name, number_format($amount), number_format($my_total_contributions), 'Marian Shrine Spirituality Centre, Don Bosco Upperhill');
+
+        $new_msg =  str_replace($search, $replace, $msg_to_donor);
+
         \App\Jobs\SendSms::dispatch([
-            'to' => $MSISDN,
-            'msg' => "$FirstName $LastName, your donation of $TransAmount was well received and will be addressed to the respective account"
-        ])->onQueue('send-sms');
+            'to' => $msisdn,
+            'message' => $new_msg
+        ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
     }
-
-    foreach ($accounts as $account){
-        $msg_to_contributor = $account->message_to_contributor;
-        $project_name = $account->project->name;
-    }
-
-    $search  = array('[1]', '[2]', '[3]', '[7]');
-    $replace = array($FirstName .' '. $LastName, number_format($TransAmount), number_format($my_total_contributions), 'Marian Shrine Spirituality Centre, Don Bosco Upperhill');
-
-    $new_msg =  str_replace($search, $replace, $msg_to_contributor);
-//    Log::info($new_msg);
-
-    \App\Jobs\SendSms::dispatch([
-        'to' => $MSISDN,
-        'msg' => $new_msg
-    ])->onQueue('send-sms');
 }
 
-//send account admin confirmation message
-function accountAdminMessageActivity($ReceiptNo, $BillRefNumber, $MSISDN, $FirstName, $LastName, $TransAmount, $my_total_contributions, $total_account_contributions){
-    $msg_to_account_admin = '';
-    $project_name = '';
+//send treasurer confirmation message
+if (!function_exists('treasurerMessageResponse')){
+    function treasurerMessageResponse($account_no, $msisdn, $name, $amount, $my_total_contributions, $total_account_contributions){
+        $msg_to_treasurer = '';
+        $project_name = '';
 
-    $accounts = Account::whereAccountNumber($BillRefNumber)->get();
+        $accounts = Account::where('account_no', $account_no)->get();
 
-    if (count($accounts) < 1){
-        \App\Jobs\SendSms::dispatch([
-            'to' => config('haba.admin_phone'),
-            'msg' => "$FirstName $LastName has donated $TransAmount to an unspecified account number. The m-pesa transaction receipt no is $ReceiptNo"
-        ])->onQueue('send-sms');
-        exit();
-    }
-
-    foreach ($accounts as $account){
-        $msg_to_account_admin = $account->message_to_account_admin;
-        $project_name = $account->project->name;
-    }
-
-    $search  = array('[1]', '[2]', '[3]', '[5]', '[7]');
-    $replace = array($FirstName . ' ' . $LastName, number_format($TransAmount), number_format($my_total_contributions), number_format($total_account_contributions), 'Marian Shrine Spirituality Centre, Don Bosco Upperhill');
-
-    $new_msg =  str_replace($search, $replace, $msg_to_account_admin);
-
-    $account_id = Account::whereAccountNumber($BillRefNumber)->value('id');
-    $account_admins = \App\Models\AccountAdmin::whereAccountId($account_id)->get();
-
-    if (count($account_admins) < 1){
-        $phone = '254705799644';
-        \App\Jobs\SendSms::dispatch([
-            'to' => $phone,
-            'msg' => $new_msg
-        ])->onQueue('send-sms');
-    }
-
-    //calculate bitwise income
-    $projects =  Project::with('accounts')->where('target_date', '>', now())->get();
-    $sum = 0;
-    foreach ($projects as $project){
-        foreach ($project->accounts as $account){
-            //$amount = \App\Models\MpesaTransaction::where('BillRefNumber', $account->account_number)->sum('TransAmount');
-            $amount = \App\Models\MpesaTransaction::sum('TransAmount');
-            $sum += $amount;
+        foreach ($accounts as $account){
+            $msg_to_treasurer = $account->message_to_treasurer;
+            $project_name = $account->project->name;
         }
-    }
 
-    $new_sum = (4.5/100) * $sum;
+        $search  = array('[1]', '[2]', '[3]', '[5]', '[7]');
+        $replace = array($name, number_format($amount), number_format($my_total_contributions), number_format($total_account_contributions), 'Marian Shrine Spirituality Centre, Don Bosco Upperhill');
 
-    Log::channel('slack')->info("$new_msg\n The new bitwise income is $new_sum");
+        $new_msg =  str_replace($search, $replace, $msg_to_treasurer);
 
-    foreach ($account_admins as $account_admin){
-        if ($account_admin->phone == '254700510737'){
-            \App\Jobs\SendSms::dispatch([
-                'to' => $account_admin->phone,
-                'msg' => $new_msg
-            ])->onQueue('send-sms');
+        $account = Account::where('account_no', $account_no)->first();
+        if ($account){
+            $treasurers = $account->treasurers()->get();
+            foreach ($treasurers as $treasurer){
+                \App\Jobs\SendSms::dispatch([
+                    'to' => $treasurer->user->msisdn,
+                    'message' => $new_msg
+                ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+            }
+
         }
+
+        //calculate bitwise income
+        $projects =  Project::with(['accounts'])->where('target_date', '>', now())->get();
+        $sum = 0;
+        foreach ($projects as $project){
+            foreach ($project->accounts as $account){
+                $amount = \App\Models\Donation::sum('amount');
+                $sum += $amount;
+            }
+        }
+
+        $new_sum = (4.5/100) * $sum;
+
+        Log::channel('slack')->info("$new_msg\n The new bitwise income is $new_sum");
     }
 }
 
@@ -184,5 +163,29 @@ function stkPush($stkAmount, $stkPhone, $account_number){
         Log::channel('stklog')->info($response->getBody());
     } catch (\Exception $e){
         Log::channel('stklog')->info($e->getMessage());
+    }
+}
+
+//get m-pesa security credential
+if (!function_exists('getMpesaSecurityCredential')) {
+    function getMpesaSecurityCredential($password, $devMode = true)
+    {
+        if (Cache::has('encrypted_mpesa_security_credential')) {
+            return decrypt(Cache::get('encrypted_mpesa_security_credential'));
+        }
+
+        $key = file_get_contents(storage_path('mpesa_certificates/prod_cert.cer.txt'));
+
+        if ($devMode){
+            $key = file_get_contents(storage_path('mpesa_certificates/sandbox_cert.cer.txt'));
+        }
+
+        openssl_public_encrypt($password, $encrypted, $key, OPENSSL_PKCS1_PADDING);
+
+        $encryptedCredentials = base64_encode($encrypted);
+
+        Cache::forever('encrypted_mpesa_security_credential', encrypt($encryptedCredentials));
+
+        return $encryptedCredentials;
     }
 }
