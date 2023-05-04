@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:refresh-mpesa-access-tokens')->everyThirtyMinutes();
         $schedule->command('app:send-pledges-notifications')->dailyAt('09:00');
+        $schedule->command('app:reset-pledge-mpesa-stk-count')->daily();
     }
 
     /**
