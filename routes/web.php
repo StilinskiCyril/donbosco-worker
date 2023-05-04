@@ -38,5 +38,8 @@ Route::group([
     // admin routes
     Route::middleware(['role:admin|super-admin'])->group(function(){
         Route::get('projects', [ProjectController::class, 'managePage'])->name('project.manage-page');
+        Route::post('create-project', [ProjectController::class, 'create'])->name('project.create');
+        Route::post('load-projects', [ProjectController::class, 'load'])->name('project.load');
+        Route::post('update-project/{project}', [ProjectController::class, 'update'])->name('project.update');
     });
 });

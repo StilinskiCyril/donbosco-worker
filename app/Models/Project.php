@@ -11,7 +11,10 @@ use Illuminate\Support\Str;
 class Project extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $guarded = ['id'];
+
+    protected $hidden = ['id'];
 
     protected static function boot(): void
     {
