@@ -21,7 +21,7 @@ class SendPledgesNotifications extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send Pledge Notifications';
 
     /**
      * Execute the console command.
