@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OtpController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,10 +20,17 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'landingPage'])->na
 
 Auth::routes(['register' => false]);
 
+// login otp view
+Route::middleware(['verified', 'auth'])->prefix('otp')->group(function () {
+    Route::get('/two-factor', [OtpController::class, 'loginOtpPage'])->name('otp.two-factor-auth-page');
+    Route::post('/send-login-otp', [OtpController::class, 'send'])->name('otp.send');
+    Route::post('/verify-login-otp', [OtpController::class, 'verify'])->name('otp.verify');
+});
+
 Route::group([
-    'middleware' => ['auth:web']
+    'middleware' => ['auth:web', 'two.factor.auth']
 ], function () {
-    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboardPage'])->name('home.dashboard');
+    Route::get('/dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
 
     // admin routes
     Route::middleware(['role:admin'])->prefix('admin')->group(function(){

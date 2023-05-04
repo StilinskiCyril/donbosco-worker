@@ -84,4 +84,10 @@ class User extends Authenticatable
         }
         return $q;
     }
+
+    // load otp
+    public function otp(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Otp::class);
+    }
 }

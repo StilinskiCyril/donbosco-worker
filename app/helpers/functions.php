@@ -109,13 +109,12 @@ function validatePhone($phone): array
     }
 }
 
-//generate account admin password/pin
-function generatePassword($digits = 6): string
+//generate random int
+function generatePin($digits = 6): string
 {
-    $i = 0; //counter
-    $pin = ""; //our default pin is blank.
+    $i = 0;
+    $pin = "";
     while($i < $digits){
-        //generate a random number between 0 and 9.
         $pin .= mt_rand(0, 9);
         $i++;
     }
