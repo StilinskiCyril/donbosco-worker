@@ -129,7 +129,7 @@
 <script>
 import Swal from "sweetalert2";
     export default {
-        name: "ProjectsComponent",
+        name: "AccountsComponent",
         data() {
             return {
                 createForm: {

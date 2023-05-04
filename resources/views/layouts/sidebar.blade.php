@@ -28,7 +28,7 @@
             </a>
         </li>
         <li>
-            <a href="javascript: void(0);">
+            <a href="{{ route('account.manage-page') }}">
                 <div class="parent-icon">
                     <i class='bx bx-user-plus'></i>
                 </div>

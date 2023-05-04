@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
@@ -37,9 +38,21 @@ Route::group([
 
     // admin routes
     Route::middleware(['role:admin|super-admin'])->group(function(){
+        /**
+         * Manage Projects
+         */
         Route::get('projects', [ProjectController::class, 'managePage'])->name('project.manage-page');
         Route::post('create-project', [ProjectController::class, 'create'])->name('project.create');
         Route::post('load-projects', [ProjectController::class, 'load'])->name('project.load');
         Route::post('update-project/{project}', [ProjectController::class, 'update'])->name('project.update');
+
+        /**
+         * Manage Accounts
+         */
+        Route::get('accounts', [AccountController::class, 'managePage'])->name('account.manage-page');
+        Route::post('create-account/{project}', [AccountController::class, 'create'])->name('account.create');
+        Route::post('load-accounts', [AccountController::class, 'load'])->name('account.load');
+        Route::post('update-account/{account}', [AccountController::class, 'update'])->name('account.update');
+        Route::post('create-account-existing/{account}', [AccountController::class, 'createExisting'])->name('account.create-existing');
     });
 });

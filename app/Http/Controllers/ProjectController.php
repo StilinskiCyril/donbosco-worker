@@ -9,13 +9,13 @@ use Illuminate\Validation\Rule;
 class ProjectController extends Controller
 {
     // manage projects page
-    public function managePage()
+    public function managePage(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('projects');
     }
 
     // create project
-    public function create(Request $request)
+    public function create(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'unique:projects'],
@@ -44,7 +44,7 @@ class ProjectController extends Controller
     }
 
     // update project
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Project $project): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string', Rule::unique('projects')->ignore($project->id)],

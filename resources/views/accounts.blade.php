@@ -1,10 +1,10 @@
 @extends('layouts.master')
-@section('title', 'Manage Projects')
+@section('title', 'Manage Accounts')
 @section('content')
     <div id="app">
         <div class="page-wrapper">
             <div class="page-content">
-                <projects-component></projects-component>
+                <accounts-component></accounts-component>
             </div>
         </div>
     </div>
