@@ -47,11 +47,11 @@ class UsersSeeder extends Seeder
         if(!$treasurer){
             $user_treasurer = User::create([
                 'name' => 'Cyril Admin',
-                'msisdn' => '254705799645',
+                'msisdn' => '254705799646',
                 'msisdn_verified_at' => now(),
-                'email' => 'aguvasucyriladmin@gmail.com',
+                'email' => 'aguvasucyriltreasurer@gmail.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('aguvasucyriladmin@gmail.com'),
+                'password' => Hash::make('aguvasucyriltreasurer@gmail.com'),
                 'remember_token' => Str::random(10),
             ]);
             $user_treasurer->assignRole('treasurer');
@@ -61,11 +61,11 @@ class UsersSeeder extends Seeder
         if(!$user){
             $user_user = User::create([
                 'name' => 'Cyril Admin',
-                'msisdn' => '254705799645',
+                'msisdn' => '254705799647',
                 'msisdn_verified_at' => now(),
-                'email' => 'aguvasucyriladmin@gmail.com',
+                'email' => 'aguvasucyriluser@gmail.com',
                 'email_verified_at' => now(),
-                'password' => Hash::make('aguvasucyriladmin@gmail.com'),
+                'password' => Hash::make('aguvasucyriluser@gmail.com'),
                 'remember_token' => Str::random(10),
             ]);
             $user_user->assignRole('treasurer');
