@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\Account;
 use App\Models\Donation;
 use App\Models\Donor;
-use App\Models\PendingMpesaTransaction;
+use App\Models\PendingMpesaDonation;
 use App\Models\UnknownDonation;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -45,7 +45,7 @@ class SaveMpesaTransaction implements ShouldQueue
         //check if the transaction was successful
         if($paymentResultCode == 0){
             //check if trans id exists in pending mpesa transactions
-            $result = PendingMpesaTransaction::where('trans_id', $this->data['content']['Result']['ResultParameters']['ResultParameter'][12]['Value'])
+            $result = PendingMpesaDonation::where('trans_id', $this->data['content']['Result']['ResultParameters']['ResultParameter'][12]['Value'])
                 ->where('status', false)->first();
 
             if ($result){

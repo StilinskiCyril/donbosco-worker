@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->double('target_amount');
             $table->dateTime('target_date');
-            $table->string('account_no')->default('MSSC');
+            $table->string('account_no')->default('PL-MSSC');
             $table->integer('frequency'); // 0 - once, 1 - daily, 2 - weekly, 3 - monthly
             $table->double('frequency_amount');
             $table->integer('once_and_monthly_frequency_date')->nullable(); // once & monthly frequency

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->uuid();
+            $table->foreignId('pledge_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('channel')->nullable();
             $table->string('trans_id')->nullable();
             $table->dateTime('trans_time')->nullable();

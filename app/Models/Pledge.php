@@ -102,4 +102,10 @@ class Pledge extends Model
     {
         return $this->belongsTo(Account::class, 'account_no', 'account_no');
     }
+
+    // load donations
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
 }

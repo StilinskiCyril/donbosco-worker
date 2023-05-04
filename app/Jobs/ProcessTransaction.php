@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\MpesaAccessToken;
-use App\Models\PendingMpesaTransaction;
+use App\Models\PendingMpesaDonation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,7 @@ class ProcessTransaction implements ShouldQueue
         $channel = $this->data['channel'];
         if ($channel == 'mpesa'){
             //store the transaction in an unknown transaction table
-            PendingMpesaTransaction::create([
+            PendingMpesaDonation::create([
                 'trans_id' => $this->data['content']['TransID'],
                 'trans_time' => Carbon::parse($this->data['content']['TransTime']),
                 'amount' => $this->data['content']['TransAmount'],

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class PendingMpesaTransaction extends Model
+class PendingMpesaDonation extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];

@@ -1,23 +1,18 @@
-@extends('layouts.app')
-
+@extends('admin.layouts.master')
+@section('title', 'Dashboard')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
+    <div id="app">
+        @role('super-admin')
+        <super-admin-dashboard-component></super-admin-dashboard-component>
+        @endrole
+        @role('admin')
+        <admin-dashboard-component></admin-dashboard-component>
+        @endrole
+        @role('treasurer')
+        <treasurer-dashboard-component></treasurer-dashboard-component>
+        @endrole
+        @role('user')
+        <user-dashboard-component></user-dashboard-component>
+        @endrole
     </div>
-</div>
 @endsection

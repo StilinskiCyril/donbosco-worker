@@ -80,4 +80,10 @@ class Donation extends Model
         }
         return $q;
     }
+
+    // load pledge
+    public function pledge()
+    {
+        return $this->belongsTo(Pledge::class);
+    }
 }

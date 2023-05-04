@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pending_mpesa_transactions', function (Blueprint $table) {
+        Schema::create('pending_mpesa_donations', function (Blueprint $table) {
             $table->id();
             $table->uuid();
             $table->string('trans_id')->nullable()->unique();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pending_mpesa_transactions');
+        Schema::dropIfExists('pending_mpesa_donations');
     }
 };

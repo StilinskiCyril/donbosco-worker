@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('unknown_donations', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignId('pending_mpesa_transaction_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('pending_mpesa_donation_id')->constrained()->cascadeOnDelete();
             $table->string('channel')->nullable();
             $table->string('msisdn')->nullable();
             $table->double('amount')->nullable();

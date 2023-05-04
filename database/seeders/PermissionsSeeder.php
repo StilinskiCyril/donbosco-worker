@@ -60,6 +60,31 @@ class PermissionsSeeder extends Seeder
             'update-pledges',
             'delete-pledges',
 
+            'create-mpesa-access-tokens',
+            'read-mpesa-access-tokens',
+            'update-mpesa-access-tokens',
+            'delete-mpesa-access-tokens',
+
+            'create-otps',
+            'read-otps',
+            'update-otps',
+            'delete-otps',
+
+            'create-donations',
+            'read-donations',
+            'update-donations',
+            'delete-donations',
+
+            'create-pending-mpesa-donations',
+            'read-pending-mpesa-donations',
+            'update-pending-mpesa-donations',
+            'delete-pending-mpesa-donations',
+
+            'create-unknown-donations',
+            'read-unknown-donations',
+            'update-unknown-donations',
+            'delete-unknown-donations',
+
             'manage-roles',
             'manage-permissions'
         ];
