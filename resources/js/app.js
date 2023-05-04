@@ -6,6 +6,7 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import VueApexCharts from "vue3-apexcharts";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -15,15 +16,15 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
+app.use(VueApexCharts);
+
 /**
  * Component Imports
  */
 import ExampleComponent from './components/ExampleComponent.vue';
 import TwoFactorAuthComponent from './components/TwoFactorAuthComponent.vue';
-import SuperAdminDashboardComponent from './components/SuperAdminDashboardComponent.vue';
-import AdminDashboardComponent from './components/AdminDashboardComponent.vue';
-import TreasurerDashboardComponent from './components/TreasurerDashboardComponent.vue';
-import UserDashboardComponent from './components/UserDashboardComponent.vue';
+import DashboardComponent from './components/DashboardComponent.vue';
+import ProjectsComponent from './components/ProjectsComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -34,10 +35,8 @@ app.component('two-factor-auth-component', TwoFactorAuthComponent);
  * Dashboard Components
  */
 app.component('example-component', ExampleComponent);
-app.component('super-admin-dashboard-component', SuperAdminDashboardComponent);
-app.component('admin-dashboard-component', AdminDashboardComponent);
-app.component('treasurer-dashboard-component', TreasurerDashboardComponent);
-app.component('user-dashboard-component', UserDashboardComponent);
+app.component('dashboard-component', DashboardComponent);
+app.component('projects-component', ProjectsComponent);
 
 /**
  * Other Components

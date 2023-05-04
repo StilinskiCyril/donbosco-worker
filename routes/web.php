@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,10 +31,12 @@ Route::middleware(['verified', 'auth'])->prefix('otp')->group(function () {
 Route::group([
     'middleware' => ['auth:web', 'two.factor.auth']
 ], function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
+    Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    Route::get('dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
+    Route::post('load-stats', [HomeController::class, 'loadStats'])->name('home.load-stats');
 
     // admin routes
-    Route::middleware(['role:admin'])->prefix('admin')->group(function(){
-        // routes here
+    Route::middleware(['role:admin|super-admin'])->group(function(){
+        Route::get('projects', [ProjectController::class, 'managePage'])->name('project.manage-page');
     });
 });
