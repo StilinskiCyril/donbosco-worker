@@ -160,45 +160,9 @@ import Swal from "sweetalert2";
             }
         },
         mounted() {
-            this.loadStats();
             this.loadProjects();
         },
         methods: {
-            loadStats(){
-                this.stats.processing = true;
-                axios.post(`/load-stats`).then(response => {
-                    this.stats.donations_today = response.data.donations_today;
-                    this.stats.donations_this_month = response.data.donations_this_month;
-                    this.stats.active_projects = response.data.active_projects;
-                    this.stats.total_donations = response.data.total_donations;
-                    this.stats.donutChartOptions = {
-                        chart: {
-                            type: 'donut',
-                        },
-                        labels: response.data.labels,
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: 200
-                                },
-                                legend: {
-                                    position: 'bottom'
-                                }
-                            }
-                        }]
-                    };
-                    this.stats.donutSeries = response.data.series;
-                    this.stats.barSeries = [{
-                        name: 'M-pesa',
-                        data: response.data.donations_summary
-                    }];
-                }).catch(error => {
-                    Swal.fire('Error!', 'Server Error... Try Again Later', 'error');
-                }).finally(() => {
-                    this.stats.processing = false;
-                });
-            },
             loadProjects(){
                 const payLoad = {
                     sort_by : 'latest',
