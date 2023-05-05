@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class Account extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $guarded = ['id'];
 
     protected $hidden = ['id'];

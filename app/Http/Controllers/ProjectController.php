@@ -47,7 +47,7 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project): \Illuminate\Http\JsonResponse
     {
         $request->validate([
-            'name' => ['required', 'string', Rule::unique('projects')->ignore($project->id)],
+            'name' => ['required', 'string', Rule::unique('projects')->ignore($project->uuid, 'uuid')],
             'description' => ['required', 'string'],
             'target_amount' => ['required', 'numeric'],
             'target_date' => ['required', 'date', 'after:today']

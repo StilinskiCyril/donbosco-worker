@@ -52,7 +52,7 @@ Route::group([
         Route::get('accounts', [AccountController::class, 'managePage'])->name('account.manage-page');
         Route::post('create-account/{project}', [AccountController::class, 'create'])->name('account.create');
         Route::post('load-accounts', [AccountController::class, 'load'])->name('account.load');
-        Route::post('update-account/{account}', [AccountController::class, 'update'])->name('account.update');
+        Route::post('update-account/{account}/{project}', [AccountController::class, 'update'])->name('account.update');
         Route::post('create-account-existing/{account}', [AccountController::class, 'createExisting'])->name('account.create-existing');
     });
 });
