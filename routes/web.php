@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\DonorsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
@@ -36,6 +37,14 @@ Route::group([
     Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
     Route::get('dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
     Route::post('load-stats', [HomeController::class, 'loadStats'])->name('home.load-stats');
+
+    Route::middleware(['role:admin|super-admin|treasurer'])->group(function(){
+        /**
+         * Manage Donors
+         */
+        Route::get('donors', [DonorsController::class, 'managePage'])->name('donors.manage-page');
+        Route::post('load-donors', [DonorsController::class, 'load'])->name('donors.load');
+    });
 
     // admin routes
     Route::middleware(['role:admin|super-admin'])->group(function(){

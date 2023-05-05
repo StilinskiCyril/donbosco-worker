@@ -43,16 +43,6 @@
                 <div class="menu-title">Treasurers</div>
             </a>
         </li>
-        @role(['super-admin'])
-        <li>
-            <a href="javascript: void(0);">
-                <div class="parent-icon">
-                    <i class='bx bx-user'></i>
-                </div>
-                <div class="menu-title">Manage Users</div>
-            </a>
-        </li>
-        @endrole
         <li>
             <a href="javascript: void(0);" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-user-pin'></i>
@@ -67,17 +57,29 @@
         <li>
             <a href="javascript: void(0);">
                 <div class="parent-icon">
-                    <i class='bx bx-donate-heart'></i>
-                </div>
-                <div class="menu-title">Donors</div>
-            </a>
-        </li>
-        <li>
-            <a href="javascript: void(0);">
-                <div class="parent-icon">
                     <i class='bx bxs-credit-card'></i>
                 </div>
                 <div class="menu-title">Expenses</div>
+            </a>
+        </li>
+        @endrole
+        @role(['super-admin'])
+        <li>
+            <a href="javascript: void(0);">
+                <div class="parent-icon">
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="menu-title">Manage Users</div>
+            </a>
+        </li>
+        @endrole
+        @role(['admin', 'super-admin', 'treasurer'])
+        <li>
+            <a href="{{ route('donors.manage-page') }}">
+                <div class="parent-icon">
+                    <i class='bx bx-donate-heart'></i>
+                </div>
+                <div class="menu-title">Donors</div>
             </a>
         </li>
         @endrole

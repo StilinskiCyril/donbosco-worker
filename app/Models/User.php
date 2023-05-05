@@ -90,4 +90,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Otp::class);
     }
+
+    // load treasurer
+    public function treasurer(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Treasurer::class);
+    }
 }

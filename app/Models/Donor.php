@@ -37,6 +37,9 @@ class Donor extends Model
         if (!is_null(request('email')) && !empty(request('email'))) {
             $q->where('email', request('email'));
         }
+        if (!is_null(request('account_no')) && !empty(request('account_no'))) {
+            $q->where('account_no', request('account_no'));
+        }
         if (!is_null(request('start')) && !empty(request('start'))) {
             $q->where('created_at', '>=', request('start'));
         }

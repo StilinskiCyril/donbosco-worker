@@ -112,7 +112,8 @@ class SaveMpesaTransaction implements ShouldQueue
                     if (!$donors){
                         Donor::create([
                             'name' => $name,
-                            'msisdn' => $formatted_msisdn
+                            'msisdn' => $formatted_msisdn,
+                            'account_no' => $account_no
                         ]);
                     }
                     $my_total_contributions = Donation::where('account_no', $account_no)

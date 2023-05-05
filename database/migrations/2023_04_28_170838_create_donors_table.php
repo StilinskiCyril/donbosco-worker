@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('msisdn')->nullable();
             $table->string('email')->nullable();
+            $table->string('account_no')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
