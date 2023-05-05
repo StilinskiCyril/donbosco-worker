@@ -32,6 +32,10 @@ class Account extends Model
         if (!is_null(request('uuid')) && !empty(request('uuid'))) {
             $q->where('uuid', request('uuid'));
         }
+        if (!is_null(request('project_uuid')) && !empty(request('project_uuid'))) {
+            $project_ids = Project::where('uuid', request('project_uuid'))->pluck('id');
+            $q->whereIn('project_id', $project_ids);
+        }
         if (!is_null(request('name')) && !empty(request('name'))) {
             $q->where('name', request('name'));
         }

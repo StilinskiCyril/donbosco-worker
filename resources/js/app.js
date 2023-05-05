@@ -26,6 +26,7 @@ import TwoFactorAuthComponent from './components/TwoFactorAuthComponent.vue';
 import DashboardComponent from './components/DashboardComponent.vue';
 import ProjectsComponent from './components/ProjectsComponent.vue';
 import AccountsComponent from './components/AccountsComponent.vue';
+import TreasurersComponent from './components/TreasurersComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -39,6 +40,7 @@ app.component('example-component', ExampleComponent);
 app.component('dashboard-component', DashboardComponent);
 app.component('projects-component', ProjectsComponent);
 app.component('accounts-component', AccountsComponent);
+app.component('treasurers-component', TreasurersComponent);
 
 /**
  * Other Components

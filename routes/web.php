@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TreasurerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -54,5 +55,13 @@ Route::group([
         Route::post('load-accounts', [AccountController::class, 'load'])->name('account.load');
         Route::post('update-account/{account}/{project}', [AccountController::class, 'update'])->name('account.update');
         Route::post('create-account-existing/{account}', [AccountController::class, 'createExisting'])->name('account.create-existing');
+
+        /**
+         * Manage Treasurers
+         */
+        Route::get('treasurers', [TreasurerController::class, 'managePage'])->name('treasurer.manage-page');
+        Route::post('create-treasurer/{account}', [TreasurerController::class, 'create'])->name('treasurer.create');
+        Route::post('load-treasurers', [TreasurerController::class, 'load'])->name('treasurer.load');
+        Route::post('update-treasurer/{treasurer}/{user}/{account}', [TreasurerController::class, 'update'])->name('treasurer.update');
     });
 });

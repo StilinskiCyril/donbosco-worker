@@ -36,7 +36,7 @@
             </a>
         </li>
         <li>
-            <a href="javascript: void(0);">
+            <a href="{{ route('treasurer.manage-page') }}">
                 <div class="parent-icon">
                     <i class='bx bx-shield'></i>
                 </div>

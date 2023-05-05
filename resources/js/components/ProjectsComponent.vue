@@ -165,8 +165,7 @@ import Swal from "sweetalert2";
         methods: {
             loadProjects(){
                 const payLoad = {
-                    sort_by : 'latest',
-                    direction : 2
+                    sort_by : 'latest'
                 };
                 this.createForm.processing = true;
                 axios.post(`/load-projects?page=${this.pagination.current_page}`, payLoad).then(response => {
