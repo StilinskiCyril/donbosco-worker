@@ -8,7 +8,7 @@
                         <form class="row g-3">
                             <div class="col-md-12">
                                 <label for="project_uuid" class="form-label">Select Project</label>
-                                <select class="form-control" v-model="createForm.project_uuid" v-on:change="selectAccount()">
+                                <select class="form-control" v-model="createForm.project_uuid" v-on:change="selectAccount('create')">
                                     <option v-for="project in projects.data" :value="project.uuid">{{ project.name }}</option>
                                 </select>
                             </div>
@@ -67,7 +67,7 @@
                                     <td>{{ treasurer.account.name }}</td>
                                     <td>{{ treasurer.account.account_no }}</td>
                                     <td>
-                                        <button @click.prevent="showUpdateAccountModal(treasurer)" class="btn btn-primary btn-block"><i class="bx bx-edit"></i> Update Treasurer</button>
+                                        <button @click.prevent="showUpdateTreasurerModal(treasurer)" class="btn btn-primary btn-block"><i class="bx bx-edit"></i> Update Treasurer</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <!-- Update Account Modal -->
+        <!-- Update Treasure Modal -->
         <div class="modal fade" id="updateTreasurerModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg bg-light">
                 <div class="modal-content">
@@ -104,38 +104,28 @@
                             <div class="card-body p-5">
                                 <form class="row g-3">
                                     <div class="col-md-12">
-                                        <label for="name" class="form-label">Account Name</label>
-                                        <input type="text" class="form-control" v-model="updateForm.name">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="project_id" class="form-label">Select Project</label>
-                                        <select class="form-control" v-model="updateForm.project_uuid">
+                                        <label for="project_uuid" class="form-label">Select Project</label>
+                                        <select class="form-control" v-model="updateForm.project_uuid" v-on:change="selectAccount('update')">
                                             <option v-for="project in projects.data" :value="project.uuid">{{ project.name }}</option>
                                         </select>
                                     </div>
-                                    <div class="col-12">
-                                        <label for="description" class="form-label"> Account Description</label>
-                                        <textarea class="form-control" v-model="updateForm.description" rows="4"></textarea>
+                                    <div class="col-md-12">
+                                        <label for="account_id" class="form-label">Select Account</label>
+                                        <select class="form-control" v-model="updateForm.account_uuid">
+                                            <option v-for="account in accounts.data" :value="account.uuid">{{ account.name }}</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="account_number" class="form-label">Account Number</label>
-                                        <input type="text" class="form-control" v-model="updateForm.account_no">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" v-model="updateForm.name">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="target_amount" class="form-label">Target Amount</label>
-                                        <input type="number" class="form-control" v-model="updateForm.target_amount">
+                                        <label for="msisdn" class="form-label">Msisdn/Phone</label>
+                                        <input type="text" class="form-control" v-model="updateForm.msisdn">
                                     </div>
                                     <div class="col-12">
-                                        <label for="target_date" class="form-label">Target Date</label>
-                                        <input type="date" class="form-control" v-model="updateForm.target_date">
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="message_to_donor" class="form-label">Message To Donor</label>
-                                        <textarea class="form-control" v-model="updateForm.message_to_donor" rows="4" placeholder="Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]. The Grand Total is KES [5]."></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <label for="message_to_treasurer" class="form-label">Message To Treasurer</label>
-                                        <textarea class="form-control" v-model="updateForm.message_to_treasurer" placeholder="[1] has donated KES [2] towards [7] totaling KES [3]. New Grand Total is KES [5]." rows="4"></textarea>
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" v-model="updateForm.email">
                                     </div>
                                 </form>
                             </div>
@@ -147,8 +137,8 @@
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Processing...
                         </button>
-                        <button v-else type="button" class="btn btn-primary" @click="updateAccount()">
-                            Update Account
+                        <button v-else type="button" class="btn btn-primary" @click="updateTreasurer()">
+                            Update Treasurer
                         </button>
                     </div>
                 </div>
@@ -174,7 +164,9 @@ import Swal from "sweetalert2";
                     processing: false
                 },
                 updateForm: {
+                    project_uuid: undefined,
                     treasure_uuid: undefined,
+                    user_uuid: undefined,
                     account_uuid: undefined,
                     name: undefined,
                     msisdn: undefined,
@@ -198,8 +190,12 @@ import Swal from "sweetalert2";
             this.loadTreasurers();
         },
         methods: {
-            selectAccount(){
-                this.loadAccount(this.createForm.project_uuid);
+            selectAccount(type){
+                if (type === 'create'){
+                    this.loadAccount(this.createForm.project_uuid);
+                } else {
+                    this.loadAccount(this.updateForm.project_uuid);
+                }
             },
             loadProjects(){
                 const payLoad = {
@@ -286,74 +282,50 @@ import Swal from "sweetalert2";
                     this.createForm.processing = false;
                 });
             },
-            showUpdateAccountModal(account){
-                this.updateForm.account_uuid = account.uuid;
-                this.updateForm.name = account.name;
-                this.updateForm.project_uuid = account.project.uuid;
-                this.updateForm.description = account.description;
-                this.updateForm.account_no = account.account_no;
-                this.updateForm.target_amount = account.target_amount;
-                this.updateForm.target_date = account.target_date;
-                this.updateForm.message_to_donor = account.message_to_donor;
-                this.updateForm.message_to_treasurer = account.message_to_treasurer;
-                $('#updateAccountModal').modal('show');
+            showUpdateTreasurerModal(treasure){
+                this.updateForm.project_uuid = treasure.account.project.uuid;
+                this.loadAccount(this.updateForm.project_uuid);
+                this.updateForm.treasure_uuid = treasure.uuid;
+                this.updateForm.user_uuid = treasure.user.uuid;
+                this.updateForm.account_uuid = treasure.account.uuid;
+                this.updateForm.name = treasure.user.name;
+                this.updateForm.msisdn = treasure.user.msisdn;
+                this.updateForm.email = treasure.user.email;
+                $('#updateTreasurerModal').modal('show');
             },
-            updateAccount(){
+            updateTreasurer(){
+                if (!this.updateForm.account_uuid){
+                    Swal.fire('Error!', 'Account is required', 'warning');
+                    return;
+                }
                 if (!this.updateForm.name){
-                    Swal.fire('Error!', 'Account name is required', 'warning');
+                    Swal.fire('Error!', 'Name is required', 'warning');
                     return;
                 }
-                if (!this.updateForm.project_uuid){
-                    Swal.fire('Error!', 'Project is required', 'warning');
+                if (!this.updateForm.msisdn){
+                    Swal.fire('Error!', 'Msisdn/Phone is required', 'warning');
                     return;
                 }
-                if (!this.updateForm.description){
-                    Swal.fire('Error!', 'Description is required', 'warning');
-                    return;
-                }
-                if (!this.updateForm.account_no){
-                    Swal.fire('Error!', 'Account no is required', 'warning');
-                    return;
-                }
-                if (!this.updateForm.target_amount){
-                    Swal.fire('Error!', 'Target amount is required', 'warning');
-                    return;
-                }
-                if (!this.updateForm.target_date){
-                    Swal.fire('Error!', 'Target date is required', 'warning');
-                    return;
-                }
-                if (!this.updateForm.message_to_donor){
-                    Swal.fire('Error!', 'Message to donor is required', 'warning');
-                    return;
-                }
-                if (!this.updateForm.message_to_treasurer){
-                    Swal.fire('Error!', 'Message to treasurer is required', 'warning');
+                if (!this.updateForm.email){
+                    Swal.fire('Error!', 'Email is required', 'warning');
                     return;
                 }
                 const payLoad = {
                     name : this.updateForm.name,
-                    description : this.updateForm.description,
-                    account_no : this.updateForm.account_no,
-                    target_amount : this.updateForm.target_amount,
-                    target_date : this.updateForm.target_date,
-                    message_to_donor : this.updateForm.message_to_donor,
-                    message_to_treasurer : this.updateForm.message_to_treasurer
+                    msisdn : this.updateForm.msisdn,
+                    email : this.updateForm.email
                 };
                 this.updateForm.processing = true;
-                axios.post(`update-account/${this.updateForm.account_uuid}/${this.updateForm.project_uuid}`, payLoad).then(response => {
+                axios.post(`update-treasurer/${this.updateForm.treasure_uuid}/${this.updateForm.user_uuid}/${this.updateForm.account_uuid}`, payLoad).then(response => {
                     if (response.data.status){
                         Swal.fire('Success!', response.data.message, 'success');
+                        this.updateForm.account_uuid = undefined;
                         this.updateForm.name = undefined;
-                        this.updateForm.description = undefined;
-                        this.updateForm.account_no = undefined;
-                        this.updateForm.target_amount = undefined;
-                        this.updateForm.target_date = undefined;
-                        this.updateForm.message_to_donor = undefined;
-                        this.updateForm.message_to_treasurer = undefined;
-                        $('#updateAccountModal').modal('hide');
+                        this.updateForm.msisdn = undefined;
+                        this.updateForm.email = undefined;
+                        $('#updateTreasurerModal').modal('hide');
                         this.loadProjects();
-                        this.loadAccounts();
+                        this.loadTreasurers();
                     } else {
                         Swal.fire('Error!', response.data.message, 'error');
                     }

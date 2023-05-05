@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class TreasurerController extends Controller
 {
@@ -29,7 +30,6 @@ class TreasurerController extends Controller
         ]);
 
         $password = generatePin();
-        Log::info($password);
         $user = User::create([
             'name' => $request->input('name'),
             'msisdn' => $request->input('msisdn'),
@@ -55,6 +55,31 @@ class TreasurerController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Treasurer Created Successfully'
+        ]);
+    }
+
+    // update treasurer
+    public function update(Request $request, Treasurer $treasurer, User $user, Account $account)
+    {
+        $request->validate([
+            'name' => ['required', 'string'],
+            'msisdn' => ['required', 'string', new ValidateMsisdn(false, 'User', 'msisdn', 'msisdn'), Rule::unique('users')->ignore($user->uuid, 'uuid')],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->uuid, 'uuid')],
+        ]);
+
+        $user->update([
+            'name' => $request->input('name'),
+            'msisdn' => $request->input('msisdn'),
+            'email' => $request->input('email')
+        ]);
+
+        $treasurer->update([
+            'account_id' => $account->id
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Treasurer Updated Successfully'
         ]);
     }
 
