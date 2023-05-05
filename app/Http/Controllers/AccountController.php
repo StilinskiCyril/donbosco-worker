@@ -21,22 +21,40 @@ class AccountController extends Controller
         $request->validate([
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'account_number' => ['required', 'string', 'unique:accounts'],
-            'target_amount' => ['required', 'numeric'],
-            'target_date' => ['required', 'date', 'after:today'],
-            'message_to_contributor' => ['required', 'string'],
-            'message_to_account_admin' => ['required', 'string']
+            'account_no' => ['required', 'string', 'unique:accounts'],
+            'target_amount' => ['required', 'numeric', 'max:'.$project->target_amount],
+            'target_date' => ['required', 'date', 'after:today', 'before:'.$project->target_date],
+            'message_to_donor' => ['required', 'string'],
+            'message_to_treasurer' => ['required', 'string']
         ]);
+
+        //validate message string
+        $message_to_donor = $request->input('message_to_donor');
+        $message_to_treasurer = $request->input('message_to_treasurer');
+
+        if (!str_contains($message_to_donor, '[1]') OR !str_contains($message_to_donor, '[2]') OR !str_contains($message_to_donor, '[3]') OR !str_contains($message_to_donor, '[5]') OR !str_contains($message_to_donor, '[7]')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Incorrect message syntax for "Message To Donor". Kindly follow instructions on the message template draft'
+            ]);
+        }
+
+        if (!str_contains($message_to_treasurer, '[1]') OR !str_contains($message_to_treasurer, '[2]') OR !str_contains($message_to_treasurer, '[3]') OR !str_contains($message_to_treasurer, '[5]') OR !str_contains($message_to_treasurer, '[7]')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Incorrect message syntax for "Message To Treasurer". Kindly follow instructions on the message template draft'
+            ]);
+        }
 
         Account::create([
             'name' => $request->input('name'),
             'project_id' => $project->id,
             'description' => $request->input('description'),
-            'account_number' => $request->input('account_number'),
+            'account_no' => $request->input('account_no'),
             'target_amount' => $request->input('target_amount'),
             'target_date' => $request->input('target_date'),
-            'message_to_contributor' => $request->input('message_to_contributor'),
-            'message_to_account_admin' => $request->input('message_to_account_admin')
+            'message_to_donor' => $message_to_donor,
+            'message_to_treasurer' => $message_to_treasurer
         ]);
 
         return response()->json([
@@ -48,7 +66,7 @@ class AccountController extends Controller
     // load accounts
     public function load(Request $request)
     {
-        return Account::filter($request)->paginate(20);
+        return Account::with(['project'])->filter($request)->paginate(20);
     }
 
     // update account
@@ -83,18 +101,18 @@ class AccountController extends Controller
     public function createExisting(Request $request, Account $account)
     {
         $request->validate([
-            'account_number' => ['required', 'string', Rule::unique('accounts')->ignore($account->id)],
+            'account_no' => ['required', 'string', 'unique:accounts']
         ]);
 
         Account::create([
             'name' => $account->name,
             'project_id' => $account->project_id,
             'description' => $account->description,
-            'account_number' => $account->account_number,
+            'account_no' => $request->input('account_no'),
             'target_amount' => $account->target_amount,
             'target_date' => $account->target_date,
-            'message_to_contributor' => $account->message_to_contributor,
-            'message_to_account_admin' => $account->message_to_account_admin
+            'message_to_donor' => $account->message_to_donor,
+            'message_to_treasurer' => $account->message_to_treasurer
         ]);
 
         return response()->json([

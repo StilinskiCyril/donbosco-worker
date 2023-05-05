@@ -6,11 +6,11 @@
                     <div class="card-body p-5">
                         <form class="row g-3">
                             <div class="col-md-12">
-                                <label for="name" class="form-label">Project Name (e.g. Land Contributions)</label>
+                                <label for="name" class="form-label">Project Name (e.g. Land Donations)</label>
                                 <input type="text" class="form-control" v-model="createForm.name">
                             </div>
                             <div class="col-12">
-                                <label for="description" class="form-label">Project Description (e.g. These are the contributions towards land)</label>
+                                <label for="description" class="form-label">Project Description (e.g. These are the donations towards land)</label>
                                 <textarea class="form-control" v-model="createForm.description" rows="3"></textarea>
                             </div>
                             <div class="col-md-6">
@@ -37,7 +37,7 @@
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <table class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -54,7 +54,7 @@
                                     <td>{{ project.target_amount }}</td>
                                     <td>{{ project.target_date }}</td>
                                     <td>
-                                        <button @click.prevent="showUpdateProjectModal(project)" class="btn btn-success btn-block"><i class="bx bx-edit"></i> Update Project</button>
+                                        <button @click.prevent="showUpdateProjectModal(project)" class="btn btn-primary btn-block"><i class="bx bx-edit"></i> Update Project</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -91,11 +91,11 @@
                             <div class="card-body p-5">
                                 <form class="row g-3">
                                     <div class="col-md-12">
-                                        <label for="name" class="form-label">Project Name (e.g. Land Contributions)</label>
+                                        <label for="name" class="form-label">Project Name (e.g. Land Donations)</label>
                                         <input type="text" class="form-control" v-model="updateForm.name">
                                     </div>
                                     <div class="col-12">
-                                        <label for="description" class="form-label">Project Description (e.g. These are the contributions towards land)</label>
+                                        <label for="description" class="form-label">Project Description (e.g. These are the donations towards land)</label>
                                         <textarea class="form-control" v-model="updateForm.description" rows="3"></textarea>
                                     </div>
                                     <div class="col-md-6">
