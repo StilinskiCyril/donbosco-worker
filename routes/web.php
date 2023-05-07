@@ -6,6 +6,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SubGroupController;
 use App\Http\Controllers\TreasurerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -81,5 +82,13 @@ Route::group([
         Route::post('create-group', [GroupController::class, 'create'])->name('group.create');
         Route::post('load-groups', [GroupController::class, 'load'])->name('group.load');
         Route::post('update-group/{group}', [GroupController::class, 'update'])->name('group.update');
+
+        /**
+         * Manage Sub-Groups
+         */
+        Route::get('sub-groups', [SubGroupController::class, 'managePage'])->name('sub-group.manage-page');
+        Route::post('create-sub-group/{group}', [SubGroupController::class, 'create'])->name('sub-group.create');
+        Route::post('load-sub-groups', [SubGroupController::class, 'load'])->name('sub-group.load');
+        Route::post('update-sub-group/{group}/{subGroup}', [SubGroupController::class, 'update'])->name('sub-group.update');
     });
 });

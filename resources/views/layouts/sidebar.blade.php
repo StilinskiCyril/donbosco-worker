@@ -51,7 +51,7 @@
             </a>
             <ul>
                 <li> <a href="{{ route('group.manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Main Groups</a></li>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Sub-Groups</a></li>
+                <li> <a href="{{ route('sub-group.manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Sub-Groups</a></li>
             </ul>
         </li>
         <li>
