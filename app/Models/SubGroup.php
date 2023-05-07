@@ -10,7 +10,10 @@ use Illuminate\Support\Str;
 class SubGroup extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $guarded = ['id'];
+
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected static function boot(): void
     {

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DonorsController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
@@ -42,8 +43,8 @@ Route::group([
         /**
          * Manage Donors
          */
-        Route::get('donors', [DonorsController::class, 'managePage'])->name('donors.manage-page');
-        Route::post('load-donors', [DonorsController::class, 'load'])->name('donors.load');
+        Route::get('donors', [DonorsController::class, 'managePage'])->name('donor.manage-page');
+        Route::post('load-donors', [DonorsController::class, 'load'])->name('donor.load');
     });
 
     // admin routes
@@ -72,5 +73,13 @@ Route::group([
         Route::post('create-treasurer/{account}', [TreasurerController::class, 'create'])->name('treasurer.create');
         Route::post('load-treasurers', [TreasurerController::class, 'load'])->name('treasurer.load');
         Route::post('update-treasurer/{treasurer}/{user}/{account}', [TreasurerController::class, 'update'])->name('treasurer.update');
+
+        /**
+         * Manage Groups
+         */
+        Route::get('groups', [GroupController::class, 'managePage'])->name('group.manage-page');
+        Route::post('create-group', [GroupController::class, 'create'])->name('group.create');
+        Route::post('load-groups', [GroupController::class, 'load'])->name('group.load');
+        Route::post('update-group/{group}', [GroupController::class, 'update'])->name('group.update');
     });
 });

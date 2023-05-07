@@ -50,7 +50,7 @@
                 <div class="menu-title">Manage Groups</div>
             </a>
             <ul>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Main Groups</a></li>
+                <li> <a href="{{ route('group.manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Main Groups</a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Sub-Groups</a></li>
             </ul>
         </li>
@@ -75,7 +75,7 @@
         @endrole
         @role(['admin', 'super-admin', 'treasurer'])
         <li>
-            <a href="{{ route('donors.manage-page') }}">
+            <a href="{{ route('donor.manage-page') }}">
                 <div class="parent-icon">
                     <i class='bx bx-donate-heart'></i>
                 </div>
