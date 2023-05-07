@@ -13,6 +13,8 @@ class UnknownDonation extends Model
 
     protected $guarded = ['id'];
 
+    protected $hidden = ['id', 'updated_at', 'deleted_at'];
+
     protected static function boot(): void
     {
         parent::boot();

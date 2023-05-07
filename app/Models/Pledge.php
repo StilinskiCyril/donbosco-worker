@@ -13,6 +13,8 @@ class Pledge extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
 
+    protected $hidden = ['id', 'updated_at', 'deleted_at'];
+
     protected static function boot(): void
     {
         parent::boot();
