@@ -107,9 +107,9 @@
             </a>
             <ul>
                 <li> <a href="{{ route('report.account-donations-manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Account Donations</a></li>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Project Contributions </a></li>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Pledge Contributions </a></li>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>All Contributions</a></li>
+                <li> <a href="{{ route('report.project-donations-manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Project Donations </a></li>
+                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Pledge Donations </a></li>
+                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>All Donations</a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Fund Distribution</a></li>
             </ul>
         </li>

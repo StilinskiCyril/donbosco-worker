@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Donation;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class ReportController extends Controller
     {
         return view('account-donations-report');
     }
+
+    // account donations report
 
     public function accountDonationsReport(Request $request, Project $project)
     {
@@ -30,7 +33,31 @@ class ReportController extends Controller
                 'amount_donated' => number_format($amount_donated, 2),
                 'balance' => number_format($account_target_amount - $amount_donated, 2),
                 'donations_against_account_target' => ($amount_donated/$account_target_amount) * 100,
-                'donations_against_project_target' => ($amount_donated/$project_target_amount) * 100,
+                'donations_against_project_target' => ($amount_donated/$project_target_amount) * 100
+            ];
+        });
+    }
+
+    // project donations manage page
+    public function projectDonationsManagePage()
+    {
+        return view('project-donations-report');
+    }
+
+    // project donations report
+
+    public function projectDonationsReport(Request $request)
+    {
+        return Project::filter($request)->get()->map(function($project) {
+            $amount_donated = Donation::sum('amount');
+            $project_target_amount = $project->target_amount;
+            return [
+                'uuid' => $project->uuid,
+                'name' => $project->name,
+                'target_amount' => number_format($project_target_amount, 2),
+                'amount_donated' => number_format($amount_donated, 2),
+                'balance' => number_format($project_target_amount - $amount_donated, 2),
+                'donations_against_project_target' => ($amount_donated/$project_target_amount) * 100
             ];
         });
     }

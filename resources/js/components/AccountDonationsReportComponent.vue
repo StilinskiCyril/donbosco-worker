@@ -39,7 +39,7 @@
                                     <th>Amount Donated</th>
                                     <th>Balance</th>
                                     <th>% Donations Against Account Target</th>
-                                    <th>% Contr Against Project Target</th>
+                                    <th>% Donations Against Project Target</th>
                                 </tr>
                                 </thead>
                                 <tbody>
