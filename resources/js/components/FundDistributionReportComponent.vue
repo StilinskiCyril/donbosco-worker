@@ -37,30 +37,30 @@
                             </tr>
                             <tr>
                                 <th>To:</th>
-                                <td>{{ stats.to }}</td>
+                                <td>{{ stats.end }}</td>
                             </tr>
                             <tr>
-                                <th>Total Collected:</th>
+                                <th>Total Collected (KES):</th>
                                 <td>{{ stats.total_collected }}</td>
                             </tr>
                             <tr>
-                                <th>Charges:</th>
+                                <th>Charges (KES):</th>
                                 <td>{{ stats.charges }}</td>
                             </tr>
                             <tr>
-                                <th>Net Collected:</th>
+                                <th>Net Collected (KES):</th>
                                 <td>{{ stats.net_collected }}</td>
                             </tr>
                             <tr>
-                                <th>Bitwise Revenue Share:</th>
+                                <th>Bitwise Revenue Share (KES):</th>
                                 <td>{{ stats.bitwise_revenue_share }}</td>
                             </tr>
                             <tr>
-                                <th>Expenses:</th>
+                                <th>Expenses (KES):</th>
                                 <td>{{ stats.expenses }}</td>
                             </tr>
                             <tr>
-                                <th>Net Amount:</th>
+                                <th>Net Amount (KES):</th>
                                 <td>{{ stats.net_amount }}</td>
                             </tr>
                         </table>
@@ -119,7 +119,11 @@ import Swal from "sweetalert2";
                     this.stats.start = response.data.start;
                     this.stats.end = response.data.end;
                 }).catch(error => {
-                    //
+                    if (error.response && error.response.status === 422) {
+                        Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
+                    } else {
+                        Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                    }
                 }).finally(() => {
                     this.filterForm.processing = false;
                 });

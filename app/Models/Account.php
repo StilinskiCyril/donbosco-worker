@@ -96,4 +96,10 @@ class Account extends Model
     {
         return $this->hasMany(Pledge::class, 'account_no', 'account_no');
     }
+
+    // load stats
+    public function stats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Stat::class);
+    }
 }

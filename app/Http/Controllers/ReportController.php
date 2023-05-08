@@ -7,6 +7,7 @@ use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\MpesaTransaction;
 use App\Models\Project;
+use App\Models\Stat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -100,22 +101,22 @@ class ReportController extends Controller
         $start_date = Carbon::parse($request->input('start'))->startOfDay();
         $end_date = Carbon::parse($request->input('end'))->endOfDay();
 
-        $total_collected = Donation::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
-        $charges = Donation::whereBetween('created_at', [$start_date, $end_date])->sum('charges');
+        $total_collected = Stat::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+        $charges = Stat::whereBetween('created_at', [$start_date, $end_date])->sum('charges');
         $net_collected = $total_collected - $charges;
         $bitwise_revenue_share = (1.5/100) * $net_collected;
         $expenses = Expense::whereBetween('date', [$start_date, $end_date])->sum('amount');
         $net_amount = $net_collected - $bitwise_revenue_share;
 
         return response()->json([
-            'total_collected' => $total_collected,
-            'charges' => $charges,
-            'net_collected' => $net_collected,
-            'bitwise_revenue_share' => $bitwise_revenue_share,
-            'expenses' => $expenses,
-            'net_amount' => $net_amount,
-            'from' => $request->input('start'),
-            'to' => $request->input('end')
+            'total_collected' => number_format($total_collected, 2),
+            'charges' => number_format($charges, 2),
+            'net_collected' => number_format($net_collected, 2),
+            'bitwise_revenue_share' => number_format($bitwise_revenue_share, 2),
+            'expenses' => number_format($expenses, 2),
+            'net_amount' => number_format($net_amount, 2),
+            'start' => $request->input('start'),
+            'end' => $request->input('end')
         ]);
     }
 }
