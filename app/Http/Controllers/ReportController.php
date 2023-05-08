@@ -108,16 +108,14 @@ class ReportController extends Controller
         $net_amount = $net_collected - $bitwise_revenue_share;
 
         return response()->json([
-            'stats' => [
-                'total_collected' => 800,
-                'charges' => $charges,
-                'net_collected' => $net_collected,
-                'bitwise_revenue_share' => $bitwise_revenue_share,
-                'expenses' => $expenses,
-                'net_amount' => $net_amount,
-                'from' => $request->input('start'),
-                'to' => $request->input('end')
-            ]
+            'total_collected' => $total_collected,
+            'charges' => $charges,
+            'net_collected' => $net_collected,
+            'bitwise_revenue_share' => $bitwise_revenue_share,
+            'expenses' => $expenses,
+            'net_amount' => $net_amount,
+            'from' => $request->input('start'),
+            'to' => $request->input('end')
         ]);
     }
 }

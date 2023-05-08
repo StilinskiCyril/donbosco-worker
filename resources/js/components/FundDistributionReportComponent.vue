@@ -41,7 +41,7 @@
                             </tr>
                             <tr>
                                 <th>Total Collected:</th>
-                                <td>XX{{ stats.total_collected }}</td>
+                                <td>{{ stats.total_collected }}</td>
                             </tr>
                             <tr>
                                 <th>Charges:</th>
@@ -110,7 +110,7 @@ import Swal from "sweetalert2";
                 };
                 this.filterForm.processing = true;
                 axios.post(`generate-fund-distribution-report`, payLoad).then(response => {
-                    this.stats.total_collected = response.total_collected;
+                    this.stats.total_collected = response.data.total_collected;
                     this.stats.charges = response.data.charges;
                     this.stats.net_collected = response.data.net_collected;
                     this.stats.bitwise_revenue_share = response.data.bitwise_revenue_share;
