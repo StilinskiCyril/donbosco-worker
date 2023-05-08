@@ -42,7 +42,7 @@
                         <form class="row g-3">
                             <div class="col-md-12">
                                 <label for="title" class="form-label">Upload M-pesa Statement</label>
-                                <input type="file" class="form-control">
+                                <input type="file" class="form-control" v-on:change="onFileChange" name="uploaded_file">
                             </div>
                             <button v-if="mpesaStatementForm.processing" class="btn btn-primary btn-rounded btn-block" type="button" disabled>
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -165,12 +165,36 @@ export default {
                     this.filterForm.processing = false;
                 });
             },
+            onFileChange(event){
+                this.mpesaStatementForm.uploaded_file = event.target.files[0];
+            },
             uploadMpesaStatement(){
-                Swal.fire('Error!', 'Coming soon...', 'warning');
-                return;
+                if (!this.mpesaStatementForm.uploaded_file){
+                    Swal.fire('Error!', 'M-pesa statement is required', 'warning');
+                    return;
+                }
+                let payLoad = new FormData();
+                payLoad.append("uploaded_file", this.mpesaStatementForm.uploaded_file);
+                this.mpesaStatementForm.processing = true;
+                axios.post(`upload-mpesa-statement`, payLoad).then(response => {
+                    if (response.data.status){
+                        Swal.fire('Success!', response.data.message, 'success');
+                        this.mpesaStatementForm.uploaded_file = undefined;
+                    } else {
+                        Swal.fire('Error!', response.data.message, 'error');
+                    }
+                }).catch(error => {
+                    if (error.response && error.response.status === 422) {
+                        Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
+                    } else {
+                        Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                    }
+                }).finally(() => {
+                    this.mpesaStatementForm.processing = false;
+                });
             },
             showAssignDonationToUserModal(donation){
-                //
+
             },
             changePage(page) {
                 this.pagination.current_page = page;

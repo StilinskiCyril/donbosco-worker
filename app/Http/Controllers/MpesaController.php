@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessMpesaReconciliation;
+use App\Jobs\ProcessTransaction;
 use App\Models\MpesaAccessToken;
 use App\Models\UnknownDonation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class MpesaController extends Controller
 {
@@ -19,7 +22,7 @@ class MpesaController extends Controller
             Log::info(json_encode($content));
         }
 
-        \App\Jobs\ProcessTransaction::dispatch([
+        ProcessTransaction::dispatch([
             'channel' => 'mpesa',
             'content' => $content,
             'ip' => $request->ip()
@@ -27,7 +30,7 @@ class MpesaController extends Controller
 
         return response()->json([
             'status'=> true,
-            'message' => 'C2b Transaction received'
+            'message' => 'C2B Transaction received'
         ]);
     }
 
@@ -137,5 +140,25 @@ class MpesaController extends Controller
     public function loadUnknownDonations(Request $request)
     {
         return UnknownDonation::filter($request)->paginate(20);
+    }
+
+    // upload mpesa statement
+    public function uploadMpesaStatement(Request $request)
+    {
+        $request->validate([
+            'uploaded_file' => ['required', 'mimes:xls,xlsx', 'max:2048']
+        ]);
+
+        $extension = $request->file('uploaded_file')->extension();
+        $file_path = Storage::disk()->putFileAs('mpesa_statements', $request->file('uploaded_file'), time().'.'.$extension, 'public');
+
+        ProcessMpesaReconciliation::dispatch([
+            'file_path' => Storage::url($file_path)
+        ])->onQueue('process-mpesa-reconciliation')->onConnection('beanstalkd-worker001');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'M-pesa Statement Uploaded Successfully'
+        ]);
     }
 }

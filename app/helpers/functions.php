@@ -121,28 +121,6 @@ function generatePin($digits = 6): string
     return $pin;
 }
 
-//generate mobile sasa token
-function mobileSasaToken(){
-    try {
-        $client = new Client();
-        $response = $client->request('POST', 'https://account.mobilesasa.com/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'client_credentials',
-                'client_secret' => 'd8b5xiBcLwBthixcyfZri9N3waFUhXvthwu65kyo',
-                'client_id' => '3c6fa820-7ec9-11eb-bd7a-b9635b94b3ba'
-            ],
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-        ]);
-
-        return json_decode($response->getBody()->getContents())->access_token;
-    } catch (\Exception $e){
-
-    }
-}
-
 //stk push
 function stkPush($stkAmount, $stkPhone, $account_number){
     try {
