@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DonorsController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OtpController;
@@ -90,5 +91,13 @@ Route::group([
         Route::post('create-sub-group/{group}', [SubGroupController::class, 'create'])->name('sub-group.create');
         Route::post('load-sub-groups', [SubGroupController::class, 'load'])->name('sub-group.load');
         Route::post('update-sub-group/{group}/{subGroup}', [SubGroupController::class, 'update'])->name('sub-group.update');
+
+        /**
+         * Manage Expenses
+         */
+        Route::get('expenses', [ExpenseController::class, 'managePage'])->name('expense.manage-page');
+        Route::post('create-expense', [ExpenseController::class, 'create'])->name('expense.create');
+        Route::post('load-expenses', [ExpenseController::class, 'load'])->name('expense.load');
+        Route::post('update-expense/{expense}', [ExpenseController::class, 'update'])->name('expense.update');
     });
 });

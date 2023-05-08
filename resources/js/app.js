@@ -30,6 +30,7 @@ import TreasurersComponent from './components/TreasurersComponent.vue';
 import DonorsComponent from './components/DonorsComponent.vue';
 import GroupsComponent from './components/GroupsComponent.vue';
 import SubGroupsComponent from './components/SubGroupsComponent.vue';
+import ExpensesComponent from './components/ExpensesComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -47,6 +48,7 @@ app.component('treasurers-component', TreasurersComponent);
 app.component('donors-component', DonorsComponent);
 app.component('groups-component', GroupsComponent);
 app.component('sub-groups-component', SubGroupsComponent);
+app.component('expenses-component', ExpensesComponent);
 
 /**
  * Other Components
