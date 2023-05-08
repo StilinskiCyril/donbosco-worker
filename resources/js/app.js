@@ -36,6 +36,7 @@ import SendSmsComponent from './components/SendSmsComponent.vue';
 import AccountDonationsReportComponent from './components/AccountDonationsReportComponent.vue';
 import ProjectDonationsReportComponent from './components/ProjectDonationsReportComponent.vue';
 import AllDonationsReportComponent from './components/AllDonationsReportComponent.vue';
+import FundDistributionReportComponent from './components/FundDistributionReportComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -59,6 +60,7 @@ app.component('send-sms-component', SendSmsComponent);
 app.component('account-donations-report-component', AccountDonationsReportComponent);
 app.component('project-donations-report-component', ProjectDonationsReportComponent);
 app.component('all-donations-report-component', AllDonationsReportComponent);
+app.component('fund-distribution-report-component', FundDistributionReportComponent);
 
 /**
  * Other Components

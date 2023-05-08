@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Donation;
+use App\Models\Expense;
+use App\Models\MpesaTransaction;
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -77,7 +80,44 @@ class ReportController extends Controller
             'start' => ['required', 'date'],
             'end' => ['required', 'date']
         ]);
-
         return Donation::filter($request)->paginate(20);
+    }
+
+    // all fund distribution manage page
+    public function fundDistributionManagePage()
+    {
+        return view('fund-distribution-report');
+    }
+
+    // fund distribution report
+    public function fundDistributionReport(Request $request)
+    {
+        $request->validate([
+            'start' => ['required', 'date'],
+            'end' => ['required', 'date']
+        ]);
+
+        $start_date = Carbon::parse($request->input('start'))->startOfDay();
+        $end_date = Carbon::parse($request->input('end'))->endOfDay();
+
+        $total_collected = Donation::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+        $charges = Donation::whereBetween('created_at', [$start_date, $end_date])->sum('charges');
+        $net_collected = $total_collected - $charges;
+        $bitwise_revenue_share = (1.5/100) * $net_collected;
+        $expenses = Expense::whereBetween('date', [$start_date, $end_date])->sum('amount');
+        $net_amount = $net_collected - $bitwise_revenue_share;
+
+        return response()->json([
+            'stats' => [
+                'total_collected' => 800,
+                'charges' => $charges,
+                'net_collected' => $net_collected,
+                'bitwise_revenue_share' => $bitwise_revenue_share,
+                'expenses' => $expenses,
+                'net_amount' => $net_amount,
+                'from' => $request->input('start'),
+                'to' => $request->input('end')
+            ]
+        ]);
     }
 }
