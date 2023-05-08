@@ -33,6 +33,7 @@ import SubGroupsComponent from './components/SubGroupsComponent.vue';
 import ExpensesComponent from './components/ExpensesComponent.vue';
 import UnknownDonationsComponent from './components/UnknownDonationsComponent.vue';
 import SendSmsComponent from './components/SendSmsComponent.vue';
+import AccountDonationsReportComponent from './components/AccountDonationsReportComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -53,6 +54,7 @@ app.component('sub-groups-component', SubGroupsComponent);
 app.component('expenses-component', ExpensesComponent);
 app.component('unknown-donations-component', UnknownDonationsComponent);
 app.component('send-sms-component', SendSmsComponent);
+app.component('account-donations-report-component', AccountDonationsReportComponent);
 
 /**
  * Other Components

@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubGroupController;
 use App\Http\Controllers\TreasurerController;
 use Illuminate\Support\Facades\Auth;
@@ -113,5 +114,11 @@ Route::group([
          */
         Route::get('send-sms', [HomeController::class, 'sendSmsPage'])->name('home.send-sms-page');
         Route::post('send-sms', [HomeController::class, 'sendSms'])->name('home.send-sms');
+
+        /**
+         * Manage Reports
+         */
+        Route::get('account-donations-report', [ReportController::class, 'accountDonationsManagePage'])->name('report.account-donations-manage-page');
+        Route::post('generate-account-donations-report/{project}', [ReportController::class, 'accountDonationsReport'])->name('report.account-donations-report');
     });
 });

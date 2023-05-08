@@ -66,7 +66,7 @@ class HomeController extends Controller
                 ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
             }
         } else {
-            $donors = Donor::all();
+            $donors = Donor::whereNotNull('msisdn')->get();
             foreach ($donors as $donor){
                 SendSms::dispatch([
                     'to' => $donor->msisdn,

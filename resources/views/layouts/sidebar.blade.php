@@ -106,7 +106,7 @@
                 <div class="menu-title">Reports</div>
             </a>
             <ul>
-                <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Account Contributions</a></li>
+                <li> <a href="{{ route('report.account-donations-manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Account Donations</a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Project Contributions </a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Pledge Contributions </a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>All Contributions</a></li>
