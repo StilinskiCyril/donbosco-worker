@@ -107,5 +107,11 @@ Route::group([
         Route::get('manage-mpesa', [MpesaController::class, 'managePage'])->name('mpesa.manage-page');
         Route::post('load-unknown-donations', [MpesaController::class, 'loadUnknownDonations'])->name('mpesa.load-unknown-donations');
         Route::post('upload-statement', [MpesaController::class, 'uploadStatement'])->name('mpesa.upload-statement');
+
+        /**
+         * Manage SMS's
+         */
+        Route::get('send-sms', [HomeController::class, 'sendSmsPage'])->name('home.send-sms-page');
+        Route::post('send-sms', [HomeController::class, 'sendSms'])->name('home.send-sms');
     });
 });

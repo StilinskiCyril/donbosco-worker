@@ -98,13 +98,13 @@ function validatePhone($phone): array
 
         return [
             'isValid' => $isValid,
-            'phone' => $phone
+            'msisdn' => $phone
         ];
 
     } catch (NumberParseException $e) {
         return [
             'isValid' => false,
-            'phone' => $phone
+            'msisdn' => $phone
         ];
     }
 }

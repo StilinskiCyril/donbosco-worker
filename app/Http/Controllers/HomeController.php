@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSms;
+use App\Models\Donor;
+use App\Models\Pledge;
+use App\Rules\ValidateMsisdn;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class HomeController extends Controller
 {
@@ -31,5 +36,48 @@ class HomeController extends Controller
     public function landingPage()
     {
         return view('landing');
+    }
+
+    // send sms page
+    public function sendSmsPage()
+    {
+        return view('send-sms');
+    }
+
+    public function sendSms(Request $request)
+    {
+        $request->validate([
+            'channel' => ['required', 'string', Rule::in(['specific-user', 'pledged-users', 'all-donors'])],
+            'msisdn' => ['nullable', 'string', new ValidateMsisdn(false)],
+            'message' => ['required', 'string', 'max:640']
+        ]);
+
+        if ($request->input('channel') == 'specific-user'){
+            SendSms::dispatch([
+                'to' => $request->input('msisdn'),
+                'message' => $request->input('message')
+            ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+        } elseif ($request->input('channel') == 'pledged-users'){
+            $pledges = Pledge::all();
+            foreach ($pledges as $pledge){
+                SendSms::dispatch([
+                    'to' => $pledge->msisdn,
+                    'message' => $request->input('message')
+                ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+            }
+        } else {
+            $donors = Donor::all();
+            foreach ($donors as $donor){
+                SendSms::dispatch([
+                    'to' => $donor->msisdn,
+                    'message' => $request->input('message')
+                ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'SMS Sent Successfully'
+        ]);
     }
 }

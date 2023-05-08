@@ -70,6 +70,14 @@
                 <div class="menu-title">M-pesa Reconciliation</div>
             </a>
         </li>
+        <li>
+            <a href="{{ route('home.send-sms-page') }}">
+                <div class="parent-icon">
+                    <i class='bx bx-message-detail'></i>
+                </div>
+                <div class="menu-title">Send SMS's</div>
+            </a>
+        </li>
         @endrole
         @role(['super-admin'])
         <li>

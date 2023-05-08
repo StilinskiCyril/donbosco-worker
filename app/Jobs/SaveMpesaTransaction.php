@@ -123,7 +123,7 @@ class SaveMpesaTransaction implements ShouldQueue
                     $donations = Donation::where('msisdn', $formatted_msisdn)->count();
                     if ($donations < 2){
                         $msg_to_contributor_on_first_deposit = "Thank you {$name} for your donation. If you would like to be a regular donor, click on the link below to register. https://sdb-mssc.donboscoshrine.com";
-                        \App\Jobs\SendSms::dispatch([
+                        SendSms::dispatch([
                             'to' => $formatted_msisdn,
                             'message' => $msg_to_contributor_on_first_deposit
                         ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
@@ -142,7 +142,7 @@ class SaveMpesaTransaction implements ShouldQueue
                         'name' => $name,
                         'account_no' => $account_no
                     ]);
-                    \App\Jobs\SendSms::dispatch([
+                    SendSms::dispatch([
                         'to' => $formatted_msisdn,
                         'message' => "$name, your donation of KES $amount was received but it doesn't seem to match any account. A reconciliation will be done shortly."
                     ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
