@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('unknown_donations', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->foreignId('pending_mpesa_donation_id')->constrained()->cascadeOnDelete();
-            $table->string('channel')->nullable();
-            $table->string('msisdn')->nullable();
+            $table->string('channel');
+            $table->string('email')->nullable();
+            $table->string('trans_id')->nullable()->unique();
+            $table->dateTime('trans_time')->nullable();
             $table->double('amount')->nullable();
+            $table->string('msisdn')->nullable();
+            $table->string('name')->nullable();
+            $table->string('account_no')->nullable();
+            $table->boolean('status')->default(false); // 0 pending, 1 resolved
             $table->softDeletes();
             $table->timestamps();
         });

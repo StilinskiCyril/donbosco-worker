@@ -133,10 +133,14 @@ class SaveMpesaTransaction implements ShouldQueue
                     //send treasurer message
                     treasurerMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
                 } else {
-                    $result->unknownDonations()->create([
+                    UnknownDonation::create([
                         'channel' => 'mpesa',
+                        'trans_id' => $trans_id,
+                        'trans_time' => $trans_time,
+                        'amount' => $amount,
                         'msisdn' => $formatted_msisdn,
-                        'amount' => $amount
+                        'name' => $name,
+                        'account_no' => $account_no
                     ]);
                     \App\Jobs\SendSms::dispatch([
                         'to' => $formatted_msisdn,

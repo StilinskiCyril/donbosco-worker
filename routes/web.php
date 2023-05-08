@@ -5,6 +5,7 @@ use App\Http\Controllers\DonorsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SubGroupController;
@@ -99,5 +100,12 @@ Route::group([
         Route::post('create-expense', [ExpenseController::class, 'create'])->name('expense.create');
         Route::post('load-expenses', [ExpenseController::class, 'load'])->name('expense.load');
         Route::post('update-expense/{expense}', [ExpenseController::class, 'update'])->name('expense.update');
+
+        /**
+         * Manage M-pesa
+         */
+        Route::get('manage-mpesa', [MpesaController::class, 'managePage'])->name('mpesa.manage-page');
+        Route::post('load-unknown-donations', [MpesaController::class, 'loadUnknownDonations'])->name('mpesa.load-unknown-donations');
+        Route::post('upload-statement', [MpesaController::class, 'uploadStatement'])->name('mpesa.upload-statement');
     });
 });

@@ -31,6 +31,7 @@ import DonorsComponent from './components/DonorsComponent.vue';
 import GroupsComponent from './components/GroupsComponent.vue';
 import SubGroupsComponent from './components/SubGroupsComponent.vue';
 import ExpensesComponent from './components/ExpensesComponent.vue';
+import UnknownDonationsComponent from './components/UnknownDonationsComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -49,6 +50,7 @@ app.component('donors-component', DonorsComponent);
 app.component('groups-component', GroupsComponent);
 app.component('sub-groups-component', SubGroupsComponent);
 app.component('expenses-component', ExpensesComponent);
+app.component('unknown-donations-component', UnknownDonationsComponent);
 
 /**
  * Other Components

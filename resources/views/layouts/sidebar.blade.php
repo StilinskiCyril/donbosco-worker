@@ -62,6 +62,14 @@
                 <div class="menu-title">Expenses</div>
             </a>
         </li>
+        <li>
+            <a href="{{ route('mpesa.manage-page') }}">
+                <div class="parent-icon">
+                    <i class='bx bx-search'></i>
+                </div>
+                <div class="menu-title">M-pesa Reconciliation</div>
+            </a>
+        </li>
         @endrole
         @role(['super-admin'])
         <li>
@@ -85,7 +93,7 @@
         @endrole
         <li>
             <a href="javascript: void(0);" class="has-arrow">
-                <div class="parent-icon"><i class='bx bxs-report'></i>
+                <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
                 </div>
                 <div class="menu-title">Reports</div>
             </a>
@@ -96,6 +104,14 @@
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>All Contributions</a></li>
                 <li> <a href="javascript: void(0);"><i class="bx bx-right-arrow-alt"></i>Fund Distribution</a></li>
             </ul>
+        </li>
+        <li>
+            <a href="tel:254705799644">
+                <div class="parent-icon">
+                    <i class='bx bx-support'></i>
+                </div>
+                <div class="menu-title">Call Us Now</div>
+            </a>
         </li>
     </ul>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MpesaAccessToken;
+use App\Models\UnknownDonation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -124,5 +125,17 @@ class MpesaController extends Controller
     {
         $content = $request->all();
         Log::channel('stklog')->info($content['Body']);
+    }
+
+    // manage groups page
+    public function managePage(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('unknown-donations');
+    }
+
+    // load unknown donations
+    public function loadUnknownDonations(Request $request)
+    {
+        return UnknownDonation::filter($request)->paginate(20);
     }
 }
