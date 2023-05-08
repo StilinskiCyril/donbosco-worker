@@ -61,4 +61,23 @@ class ReportController extends Controller
             ];
         });
     }
+
+    // all donations manage page
+    public function allDonationsManagePage()
+    {
+        return view('all-donations-report');
+    }
+
+    // all donations report
+    public function allDonationsReport(Request $request)
+    {
+        $request->validate([
+            'project_uuid' => ['nullable', 'string'],
+            'account_uuid' => ['nullable', 'string'],
+            'start' => ['required', 'date'],
+            'end' => ['required', 'date']
+        ]);
+
+        return Donation::filter($request)->paginate(20);
+    }
 }

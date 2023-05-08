@@ -483,7 +483,7 @@ import Swal from "sweetalert2";
             changePage(page) {
                 this.pagination.current_page = page;
                 this.loadAccounts();
-            },
+            }
         },
         computed: {
             pagesNumber() {

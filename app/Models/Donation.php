@@ -30,6 +30,15 @@ class Donation extends Model
         if (!is_null(request('uuid')) && !empty(request('uuid'))) {
             $q->where('uuid', request('uuid'));
         }
+        if (!is_null(request('project_uuid')) && !empty(request('project_uuid'))) {
+            $project = Project::where('uuid', request('project_uuid'))->first();
+            $account_nos = $project->accounts->pluck('account_no');
+            $q->whereIn('account_no', $account_nos);
+        }
+        if (!is_null(request('account_uuid')) && !empty(request('account_uuid'))) {
+            $account_nos = Account::where('uuid', request('account_uuid'))->pluck('account_no');
+            $q->whereIn('account_no', $account_nos);
+        }
         if (!is_null(request('channel')) && !empty(request('channel'))) {
             $q->where('channel', request('channel'));
         }

@@ -122,5 +122,7 @@ Route::group([
         Route::post('generate-account-donations-report/{project}', [ReportController::class, 'accountDonationsReport'])->name('report.account-donations-report');
         Route::get('project-donations-report', [ReportController::class, 'projectDonationsManagePage'])->name('report.project-donations-manage-page');
         Route::post('generate-project-donations-report', [ReportController::class, 'projectDonationsReport'])->name('report.project-donations-report');
+        Route::get('all-donations-report', [ReportController::class, 'allDonationsManagePage'])->name('report.all-donations-manage-page');
+        Route::post('generate-all-donations-report', [ReportController::class, 'allDonationsReport'])->name('report.all-donations-report');
     });
 });
