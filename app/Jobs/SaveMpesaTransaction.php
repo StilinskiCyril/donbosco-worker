@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\PendingMpesaDonation;
+use App\Models\Pledge;
 use App\Models\UnknownDonation;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -67,14 +68,23 @@ class SaveMpesaTransaction implements ShouldQueue
                     $formatted_msisdn = $msisdn;
                 }
 
-                $account_no = 'MSSC';
-//                $account_no = $result->account_no;
+//                $account_no = 'MSSC';
+                $account_no = $result->account_no;
                 $trans_id = $this->data['content']['Result']['ResultParameters']['ResultParameter'][12]['Value'];
                 $amount = $this->data['content']['Result']['ResultParameters']['ResultParameter'][10]['Value'];
                 $trans_time = Carbon::parse($this->data['content']['Result']['ResultParameters']['ResultParameter'][9]['Value'])->toDateTimeString();
                 $business_short_code = $result->business_short_code;
                 $third_party_trans_id = $result->third_party_trans_id;
-                $account = Account::where('account_no', $account_no)->first();
+
+                // extract the user info
+                $donors = Donor::where('msisdn', $formatted_msisdn)->first();
+                if (!$donors){
+                    Donor::create([
+                        'name' => $name,
+                        'msisdn' => $formatted_msisdn,
+                        'account_no' => $account_no
+                    ]);
+                }
 
                 //calculate charges and net
                 $charges = match ($amount) {
@@ -90,9 +100,11 @@ class SaveMpesaTransaction implements ShouldQueue
 
                 $net = $amount - $charges;
 
-                //check if the account number entered by user matches any account
-                if ($account){
-                    //save the transaction
+                /**
+                 * Prioritize Pledge Donations
+                 */
+                $pledge = Pledge::where('account_no', $account_no)->first();
+                if ($pledge){
                     Donation::create([
                         'channel' => 'mpesa',
                         'trans_id' => $trans_id,
@@ -107,45 +119,64 @@ class SaveMpesaTransaction implements ShouldQueue
                         'charges' => $charges,
                         'net' => $net
                     ]);
-                    //extract the user info
-                    $donors = Donor::where('msisdn', $formatted_msisdn)->first();
-                    if (!$donors){
-                        Donor::create([
-                            'name' => $name,
-                            'msisdn' => $formatted_msisdn,
-                            'account_no' => $account_no
-                        ]);
-                    }
                     $my_total_contributions = Donation::where('account_no', $account_no)
                         ->where('msisdn', $formatted_msisdn)->sum('amount');
                     $total_account_contributions = Donation::where('account_no', $account_no)->sum('amount');
-                    //send first time donors a message
-                    $donations = Donation::where('msisdn', $formatted_msisdn)->count();
-                    if ($donations < 2){
-                        $msg_to_contributor_on_first_deposit = "Thank you {$name} for your donation. If you would like to be a regular donor, click on the link below to register. https://sdb-mssc.donboscoshrine.com";
-                        SendSms::dispatch([
-                            'to' => $formatted_msisdn,
-                            'message' => $msg_to_contributor_on_first_deposit
-                        ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
-                    }
                     //send donor message
                     donorMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
                     //send treasurer message
                     treasurerMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
                 } else {
-                    UnknownDonation::create([
-                        'channel' => 'mpesa',
-                        'trans_id' => $trans_id,
-                        'trans_time' => $trans_time,
-                        'amount' => $amount,
-                        'msisdn' => $formatted_msisdn,
-                        'name' => $name,
-                        'account_no' => $account_no
-                    ]);
-                    SendSms::dispatch([
-                        'to' => $formatted_msisdn,
-                        'message' => "$name, your donation of KES $amount was received but it doesn't seem to match any account. A reconciliation will be done shortly."
-                    ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+                    /**
+                     * Account Donations
+                     */
+                    $account = Account::where('account_no', $account_no)->first();
+                    if ($account){
+                        Donation::create([
+                            'channel' => 'mpesa',
+                            'trans_id' => $trans_id,
+                            'trans_time' => $trans_time,
+                            'amount' => $amount,
+                            'business_short_code' => $business_short_code,
+                            'account_no' => $account_no,
+                            'third_party_trans_id' => $third_party_trans_id,
+                            'msisdn' => $formatted_msisdn,
+                            'name' => $name,
+                            'ip' => $ip,
+                            'charges' => $charges,
+                            'net' => $net
+                        ]);
+                        $my_total_contributions = Donation::where('account_no', $account_no)
+                            ->where('msisdn', $formatted_msisdn)->sum('amount');
+                        $total_account_contributions = Donation::where('account_no', $account_no)->sum('amount');
+                        //send first time donors a message
+                        $donations = Donation::where('msisdn', $formatted_msisdn)->count();
+                        if ($donations < 2){
+                            $msg_to_contributor_on_first_deposit = "Thank you {$name} for your donation. If you would like to be a regular donor, click on the link below to register. https://sdb-mssc.donboscoshrine.com";
+                            SendSms::dispatch([
+                                'to' => $formatted_msisdn,
+                                'message' => $msg_to_contributor_on_first_deposit
+                            ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+                        }
+                        //send donor message
+                        donorMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                        //send treasurer message
+                        treasurerMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                    } else {
+                        UnknownDonation::create([
+                            'channel' => 'mpesa',
+                            'trans_id' => $trans_id,
+                            'trans_time' => $trans_time,
+                            'amount' => $amount,
+                            'msisdn' => $formatted_msisdn,
+                            'name' => $name,
+                            'account_no' => $account_no
+                        ]);
+                        SendSms::dispatch([
+                            'to' => $formatted_msisdn,
+                            'message' => "$name, your donation of KES $amount was received but it doesn't seem to match any account. A reconciliation will be done shortly."
+                        ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+                    }
                 }
                 //update that the transaction has been verified to be from m-pesa
                 $result->update([
