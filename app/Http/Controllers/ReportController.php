@@ -137,7 +137,7 @@ class ReportController extends Controller
             'end' => ['required', 'date']
         ]);
 
-        return Pledge::filter(20)->paginate(20)->get()->map(function($pledge) {
+        return Pledge::filter(20)->paginate(20)->map(function($pledge) {
             $amount_donated = Stat::where('account_no', $pledge->account_no)->sum('amount');
             $pledge_target_amount = $pledge->target_amount;
             if ($pledge->frequency == 0){
@@ -168,7 +168,7 @@ class ReportController extends Controller
     }
 
     // pledge donations
-    public function pledgeDonations(Request $request, Pledge $pledge)
+    public function pledgeDonations(Pledge $pledge)
     {
         $donations = $pledge->donations()->paginate(20);
         return view('pledge-donations', compact('donations', 'pledge'));
