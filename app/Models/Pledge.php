@@ -108,6 +108,6 @@ class Pledge extends Model
     // load donations
     public function donations()
     {
-        return $this->hasMany(Donation::class);
+        return $this->hasMany(Donation::class, 'account_no', 'account_no');
     }
 }

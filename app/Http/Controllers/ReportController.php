@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\MpesaTransaction;
+use App\Models\Pledge;
 use App\Models\Project;
 use App\Models\Stat;
 use Carbon\Carbon;
@@ -118,5 +119,58 @@ class ReportController extends Controller
             'start' => $request->input('start'),
             'end' => $request->input('end')
         ]);
+    }
+
+    // pledge donations manage page
+    public function pledgeDonationsManagePage()
+    {
+        return view('pledge-donations-report');
+    }
+
+    // pledge donations report
+    public function pledgeDonationsReport(Request $request)
+    {
+        $request->validate([
+            'frequency' => ['nullable', 'numeric'],
+            'payment_status' => ['nullable', 'numeric'],
+            'start' => ['required', 'date'],
+            'end' => ['required', 'date']
+        ]);
+
+        return Pledge::filter(20)->paginate(20)->get()->map(function($pledge) {
+            $amount_donated = Stat::where('account_no', $pledge->account_no)->sum('amount');
+            $pledge_target_amount = $pledge->target_amount;
+            if ($pledge->frequency == 0){
+                $frequency = 'Once';
+            } elseif ($pledge->frequency == 1){
+                $frequency = 'Daily';
+            } elseif ($pledge->frequency == 2){
+                $frequency = 'Weekly';
+            } else {
+                $frequency = 'Monthly';
+            }
+            return [
+                'uuid' => $pledge->uuid,
+                'name' => $pledge->name,
+                'msisdn' => $pledge->msisdn,
+                'email' => $pledge->email,
+                'target_amount' => number_format($pledge_target_amount, 2),
+                'target_date' => $pledge->target_date,
+                'frequency' => $frequency,
+                'frequency_amount' => number_format($pledge->frequency_amount, 2),
+                'last_alert_time' => $pledge->last_alert_time,
+                'account_no' => $pledge->account_no,
+                'amount_donated' => number_format($amount_donated, 2),
+                'balance' => number_format($pledge_target_amount - $amount_donated, 2),
+                'payment_status' => $pledge->payment_status
+            ];
+        });
+    }
+
+    // pledge donations
+    public function pledgeDonations(Request $request, Pledge $pledge)
+    {
+        $donations = $pledge->donations()->paginate(20);
+        return view('pledge-donations', compact('donations', 'pledge'));
     }
 }
