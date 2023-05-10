@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i>Sign in</button>
+                                                <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i>Sign In</button>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
