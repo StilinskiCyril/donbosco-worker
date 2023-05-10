@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('ui-kit/images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('ui-kit/images/logo.png') }}" type="image/png" />
     <!--plugins-->
     <link href="{{ asset('ui-kit/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('ui-kit/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
@@ -73,6 +73,9 @@
                                                 <button type="submit" class="btn btn-primary"><i class="bx bxs-lock-open"></i>Sign in</button>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <a href="{{ route('register') }}"><p class="text-success text-center">Not Registered? Click Here To Sign Up</p></a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -110,7 +113,7 @@
     });
 </script>
 <!--app JS-->
-<script src="UI/js/app.js"></script>
+<script src="{{ asset('ui-kit/js/app.js') }}"></script>
 </body>
 
 

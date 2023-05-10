@@ -98,7 +98,6 @@
                 <div class="menu-title">Donors</div>
             </a>
         </li>
-        @endrole
         <li>
             <a href="javascript: void(0);" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-bar-chart-alt-2'></i>
@@ -113,6 +112,7 @@
                 <li> <a href="{{ route('report.fund-distribution-manage-page') }}"><i class="bx bx-right-arrow-alt"></i>Fund Distribution</a></li>
             </ul>
         </li>
+        @endrole
         <li>
             <a href="tel:254705799644">
                 <div class="parent-icon">

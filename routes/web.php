@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'landingPage'])->name('home.landing');
 
-Auth::routes(['register' => false]);
+Auth::routes();
 
 // login otp view
 Route::middleware(['verified', 'auth'])->prefix('otp')->group(function () {
