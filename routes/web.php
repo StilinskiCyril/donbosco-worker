@@ -7,6 +7,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MpesaController;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\PledgeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SubGroupController;
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'landingPage'])->name('home.landing');
 
 Auth::routes();
+
+// pledge
+Route::post('create-pledge', [PledgeController::class, 'create'])->name('pledge.create');
 
 // login otp view
 Route::middleware(['verified', 'auth'])->prefix('otp')->group(function () {

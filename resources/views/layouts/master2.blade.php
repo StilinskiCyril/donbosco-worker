@@ -38,26 +38,6 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
     <link rel="preload" as="style" href="{{ asset('ui-kit2/assets/mobirise/css/mbr-additional.css') }}"><link rel="stylesheet" href="{{ asset('ui-kit2/assets/mobirise/css/mbr-additional.css') }}" type="text/css">
 
-    <script>
-        function ToggleMenu(value){
-            if (value == 2){
-                $('#day_of_the_week').removeClass('hide')
-                $('#date').addClass('hide')
-            } else if (value == 3){
-                $('#date').removeClass('hide')
-                $('#day_of_the_week').addClass('hide')
-            } else {
-                $('#date').addClass('hide')
-                $('#day_of_the_week').addClass('hide')
-            }
-        }
-    </script>
-    <style>
-        .hide{
-            display: none;
-        }
-    </style>
-
     {{--    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>--}}
 
 </head>
@@ -147,5 +127,6 @@
     </div>
 </section>
 
+@vite(['resources/js/app.js'])
 </body>
 </html>
