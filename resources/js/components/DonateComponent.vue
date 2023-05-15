@@ -39,7 +39,7 @@
                                 <div class="col-lg-12 col-md col-sm-12 form-group">
                                     <label>Select Account</label>
                                     <select v-model="createForm.account_no" class="form-control">
-                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name }}</option>
+                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name +'---'+ account.account_no }}</option>
                                     </select>
                                 </div>
 
