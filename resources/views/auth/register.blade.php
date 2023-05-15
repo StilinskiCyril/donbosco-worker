@@ -30,7 +30,7 @@
             <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
                 <div class="col mx-auto">
                     <div class="mb-4 text-center">
-                        <a href="{{ route('home.landing') }}">
+                        <a href="{{ route('home.landing-page') }}">
                             <img src="{{ asset('ui-kit/images/logo.png') }}" width="180" alt="Logo" />
                         </a>
                     </div>

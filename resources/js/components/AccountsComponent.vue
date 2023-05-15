@@ -228,8 +228,8 @@ import Swal from "sweetalert2";
                     account_no: undefined,
                     target_amount: undefined,
                     target_date: undefined,
-                    message_to_donor: undefined,
-                    message_to_treasurer: undefined,
+                    message_to_donor: "Thank you [1] for donating KES [2] towards [7]. Your total donation is KES [3]. The Grand Total is KES [5].",
+                    message_to_treasurer: "[1] has donated KES [2] towards [7] totaling KES [3]. New Grand Total is KES [5].",
                     processing: false
                 },
                 createFromExistingAccountForm: {

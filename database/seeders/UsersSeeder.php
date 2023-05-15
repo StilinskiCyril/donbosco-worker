@@ -43,19 +43,19 @@ class UsersSeeder extends Seeder
             $user_admin->assignRole('admin');
         }
 
-        $treasurer = User::where('msisdn', '254705799646')->first();
-        if(!$treasurer){
-            $user_treasurer = User::create([
-                'name' => 'Cyril Admin',
-                'msisdn' => '254705799646',
-                'msisdn_verified_at' => now(),
-                'email' => 'aguvasucyriltreasurer@gmail.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('aguvasucyriltreasurer@gmail.com'),
-                'remember_token' => Str::random(10),
-            ]);
-            $user_treasurer->assignRole('treasurer');
-        }
+//        $treasurer = User::where('msisdn', '254705799646')->first();
+//        if(!$treasurer){
+//            $user_treasurer = User::create([
+//                'name' => 'Cyril Admin',
+//                'msisdn' => '254705799646',
+//                'msisdn_verified_at' => now(),
+//                'email' => 'aguvasucyriltreasurer@gmail.com',
+//                'email_verified_at' => now(),
+//                'password' => Hash::make('aguvasucyriltreasurer@gmail.com'),
+//                'remember_token' => Str::random(10),
+//            ]);
+//            $user_treasurer->assignRole('treasurer');
+//        }
 
         $user = User::where('msisdn', '254705799647')->first();
         if(!$user){
@@ -68,7 +68,7 @@ class UsersSeeder extends Seeder
                 'password' => Hash::make('aguvasucyriluser@gmail.com'),
                 'remember_token' => Str::random(10),
             ]);
-            $user_user->assignRole('treasurer');
+            $user_user->assignRole('user');
         }
     }
 }
