@@ -20,7 +20,7 @@
                                 </div>
 
                                 <div class="col-lg-12 col-md col-sm-12 form-group">
-                                    <label>Payment Mode</label>
+                                    <label>Select Payment Mode</label>
                                     <select v-model="createForm.payment_mode" class="form-control">
                                         <option value="mpesa">M-pesa</option>
                                         <option value="paypal">PayPal</option>
@@ -34,6 +34,13 @@
 
                                 <div class="col-lg-12 col-md col-sm-12 form-group" v-if="createForm.payment_mode === 'card'">
                                     <input type="text" disabled placeholder="Card Integration Coming Soon..." class="form-control">
+                                </div>
+
+                                <div class="col-lg-12 col-md col-sm-12 form-group">
+                                    <label>Select Account</label>
+                                    <select v-model="createForm.account_no" class="form-control">
+                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name }}</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-lg-12 col-md col-sm-12 form-group">
@@ -61,65 +68,92 @@
 import Swal from "sweetalert2";
 
 export default {
-        name: "LandingComponent",
+        name: "DonateComponent",
         data() {
             return {
+                accounts: {},
                 createForm: {
                     payment_mode: 'mpesa',
                     msisdn: undefined,
+                    account_no: undefined,
                     amount: undefined,
                     processing: false
                 }
             }
         },
-        methods: {
-            donateNow(){
-                if (!this.createForm.payment_mode){
-                    Swal.fire('Error!', 'Payment mode is required', 'warning');
-                    return;
+    mounted() {
+        this.loadAccounts();
+    },
+    methods: {
+        loadAccounts(){
+            const payLoad = {
+                sort_by: 'latest'
+            };
+            this.createForm.processing = true;
+            axios.post(`/load-accounts-without-project`, payLoad).then(response => {
+                this.accounts = response.data;
+            }).catch(error => {
+                if (error.response && error.response.status === 422) {
+                    Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
+                } else {
+                    Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
                 }
-                if (this.createForm.payment_mode === 'card'){
-                    Swal.fire('Error!', 'Card Payment Integration Coming Soon...', 'warning');
-                    return;
-                }
-                if (!this.createForm.amount){
-                    Swal.fire('Error!', 'Amount is required', 'warning');
-                    return;
-                }
-                if (this.createForm.amount < 5){
-                    Swal.fire('Error!', 'Amount should be more than 5 KES', 'warning');
-                    return;
-                }
-
-                if (this.createForm.payment_mode === 'mpesa' && !this.createForm.msisdn){
-                    Swal.fire('Error!', 'Phone/ Msisdn is required if payment mode is mpesa', 'warning');
-                    return;
-                }
-                const payLoad = {
-                    payment_mode: this.createForm.payment_mode,
-                    msisdn: this.createForm.msisdn,
-                    amount: this.createForm.amount
-                };
-                this.createForm.processing = true;
-                axios.post(`/donate-now`, payLoad).then(response => {
-                    if (response.data.status){
-                        Swal.fire('Success!', response.data.message, 'success');
-                        this.createForm.payment_mode = 'mpesa';
-                        this.createForm.msisdn = undefined;
-                        this.createForm.amount = undefined;
-                    } else {
-                        Swal.fire('Error!', response.data.message, 'error');
-                    }
-                }).catch(error => {
-                    if (error.response && error.response.status === 422) {
-                        Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
-                    } else {
-                        Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
-                    }
-                }).finally(() => {
-                    this.createForm.processing = false;
-                });
+            }).finally(() => {
+                this.createForm.processing = false;
+            });
+        },
+        donateNow(){
+            if (!this.createForm.payment_mode){
+                Swal.fire('Error!', 'Payment mode is required', 'warning');
+                return;
             }
+            if (this.createForm.payment_mode === 'card'){
+                Swal.fire('Error!', 'Card Payment Integration Coming Soon...', 'warning');
+                return;
+            }
+            if (this.createForm.payment_mode === 'mpesa' && !this.createForm.msisdn){
+                Swal.fire('Error!', 'Phone/ Msisdn is required if payment mode is mpesa', 'warning');
+                return;
+            }
+            if (!this.createForm.account_no){
+                Swal.fire('Error!', 'Account No is required', 'warning');
+                return;
+            }
+            if (!this.createForm.amount){
+                Swal.fire('Error!', 'Amount is required', 'warning');
+                return;
+            }
+            if (this.createForm.amount < 5){
+                Swal.fire('Error!', 'Amount should be more than 5 KES', 'warning');
+                return;
+            }
+            const payLoad = {
+                payment_mode: this.createForm.payment_mode,
+                msisdn: this.createForm.msisdn,
+                account_no: this.createForm.account_no,
+                amount: this.createForm.amount,
+            };
+            this.createForm.processing = true;
+            axios.post(`/donate-now`, payLoad).then(response => {
+                if (response.data.status){
+                    Swal.fire('Success!', response.data.message, 'success');
+                    this.createForm.payment_mode = 'mpesa';
+                    this.createForm.msisdn = undefined;
+                    this.createForm.account_no = undefined;
+                    this.createForm.amount = undefined;
+                } else {
+                    Swal.fire('Error!', response.data.message, 'error');
+                }
+            }).catch(error => {
+                if (error.response && error.response.status === 422) {
+                    Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
+                } else {
+                    Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                }
+            }).finally(() => {
+                this.createForm.processing = false;
+            });
+        }
         }
     }
 </script>

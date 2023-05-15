@@ -69,6 +69,12 @@ class AccountController extends Controller
         return Account::with(['project'])->filter($request)->paginate(20);
     }
 
+    // load accounts without projects
+    public function loadWithoutProject(Request $request)
+    {
+        return Account::filter($request)->paginate(20);
+    }
+
     // update account
     public function update(Request $request, Account $account, Project $project)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MpesaStkPush;
 use App\Jobs\SendSms;
 use App\Models\Donor;
 use App\Models\Pledge;
@@ -45,22 +46,31 @@ class HomeController extends Controller
     }
 
     // donate now
-    public function donateNow(Request $request)
+    public function donateNow(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'payment_mode' => ['required', 'string', Rule::in(['mpesa', 'paypal', 'card'])],
             'msisdn' => [$request->input('payment_mode') == 'mpesa' ? 'required' : 'nullable', 'string', new ValidateMsisdn(false, true)],
+            'account_no' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:5']
         ]);
 
         if ($request->input('payment_mode') == 'mpesa'){
-            Stk
+            MpesaStkPush::dispatch([
+                'amount' => $request->input('amount'),
+                'msisdn' => $request->input('msisdn'),
+                'account_no' => $request->input('account_no')
+            ])->onQueue('mpesa-stk-push')->onConnection('beanstalkd-worker001');
+
             return response()->json([
                 'status' => true,
                 'message' => 'Safaricom M-pesa Stk Prompt Sent To '.$request->input('msisdn'). '. Enter M-pesa Pin On Your Phone To Make Your Donation'
             ]);
         } elseif ($request->input('payment_mode' == 'paypal')){
-
+            return response()->json([
+                'status' => true,
+                'message' => 'PayPal Integration Coming Soon...'
+            ]);
         } else {
             return response()->json([
                 'status' => true,
@@ -70,7 +80,7 @@ class HomeController extends Controller
     }
 
     // send sms page
-    public function sendSmsPage()
+    public function sendSmsPage(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('send-sms');
     }

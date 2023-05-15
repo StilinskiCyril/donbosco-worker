@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ProcessMpesaReconciliation;
 use App\Jobs\ProcessTransaction;
+use App\Jobs\SaveMpesaTransaction;
 use App\Models\MpesaAccessToken;
 use App\Models\UnknownDonation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class MpesaController extends Controller
 {
     //Transaction Confirmation Url
-    public function confirmationUrl(Request $request)
+    public function confirmationUrl(Request $request): \Illuminate\Http\JsonResponse
     {
         $content = $request->all();
 
@@ -35,7 +37,7 @@ class MpesaController extends Controller
     }
 
     //transaction check callback
-    public function transactionCheck(Request $request)
+    public function transactionCheck(Request $request): \Illuminate\Http\JsonResponse
     {
         $content = $request->all();
 
@@ -43,7 +45,7 @@ class MpesaController extends Controller
             Log::info(json_encode($content));
         }
 
-        \App\Jobs\SaveMpesaTransaction::dispatch([
+        SaveMpesaTransaction::dispatch([
             'content' => $content,
             'ip' => $request->ip()
         ])->onQueue('save-mpesa-transaction')->onConnection('beanstalkd-worker001');
@@ -55,7 +57,7 @@ class MpesaController extends Controller
     }
 
     //transaction check timeout
-    public function transactionCheckTimeout(Request $request)
+    public function transactionCheckTimeout(Request $request): \Illuminate\Http\JsonResponse
     {
         $content = $request->all();
 
@@ -96,7 +98,7 @@ class MpesaController extends Controller
     }
 
     //initiate stk push
-    public function stKPush(Request $request)
+    public function stKPush(Request $request): bool|string
     {
         $data = MpesaAccessToken::where('type', 'c2b')->first();
         $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
@@ -109,12 +111,12 @@ class MpesaController extends Controller
             'Timestamp' => Carbon::rawParse('now')->format('YmdHms'),
             'TransactionType' => 'CustomerPayBillOnline',
             'Amount' => $request->amount,
-            'PartyA' => $request->phone,
+            'PartyA' => $request->msisdn,
             'PartyB' => config('mpesa.business_shortcode'),
-            'PhoneNumber' =>  $request->phone,
+            'PhoneNumber' =>  $request->msisdn,
             'CallBackURL' => url('api/v1/c2b/stk/transaction/callback'),
-            'AccountReference' => $request->account_number,
-            'TransactionDesc' => "Haba Payment"
+            'AccountReference' => $request->account_no,
+            'TransactionDesc' => "DonBosco MSSC Payment"
         ];
         $data_string = json_encode($curl_post_data);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -124,7 +126,7 @@ class MpesaController extends Controller
     }
 
     //stk callback url
-    public function stkCallback(Request $request)
+    public function stkCallback(Request $request): void
     {
         $content = $request->all();
         Log::channel('stklog')->info($content['Body']);
@@ -142,8 +144,8 @@ class MpesaController extends Controller
         return UnknownDonation::filter($request)->paginate(20);
     }
 
-    // upload mpesa statement
-    public function uploadMpesaStatement(Request $request)
+    // upload m-pesa statement
+    public function uploadMpesaStatement(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'uploaded_file' => ['required', 'mimes:xls,xlsx', 'max:2048']

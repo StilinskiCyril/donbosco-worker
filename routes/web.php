@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'landingPage'])->name('home.landing-page');
 Route::get('donate', [HomeController::class, 'donatePage'])->name('home.donate-page');
 Route::post('donate-now', [HomeController::class, 'donateNow'])->name('home.donate-now');
+Route::post('load-accounts-without-project', [AccountController::class, 'loadWithoutProject'])->name('account.load-without-project');
 
 Auth::routes();
 
