@@ -123,9 +123,9 @@ class SaveMpesaTransaction implements ShouldQueue
                         ->where('msisdn', $formatted_msisdn)->sum('amount');
                     $total_account_contributions = Donation::where('account_no', $account_no)->sum('amount');
                     //send donor message
-                    donorMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                    donorMessageResponse('mpesa', $account_no, $formatted_msisdn, null, $name, $amount, $my_total_contributions, $total_account_contributions);
                     //send treasurer message
-                    treasurerMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                    treasurerMessageResponse('mpesa', $account_no, $formatted_msisdn, null, $name, $amount, $my_total_contributions, $total_account_contributions);
                 } else {
                     /**
                      * Account Donations
@@ -159,15 +159,15 @@ class SaveMpesaTransaction implements ShouldQueue
                             ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
                         }
                         //send donor message
-                        donorMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                        donorMessageResponse('mpesa', $account_no, $formatted_msisdn, null, $name, $amount, $my_total_contributions, $total_account_contributions);
                         //send treasurer message
-                        treasurerMessageResponse($account_no, $formatted_msisdn, $name, $amount, $my_total_contributions, $total_account_contributions);
+                        treasurerMessageResponse('mpesa', $account_no, $formatted_msisdn, null, $name, $amount, $my_total_contributions, $total_account_contributions);
                     } else {
                         UnknownDonation::create([
                             'channel' => 'mpesa',
                             'trans_id' => $trans_id,
                             'trans_time' => $trans_time,
-                            'amount' => $amount,
+                            'amount' => $net,
                             'msisdn' => $formatted_msisdn,
                             'name' => $name,
                             'account_no' => $account_no

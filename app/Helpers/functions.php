@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\SendSms;
 use App\Models\Account;
 use App\Models\Project;
 use GuzzleHttp\Client;
@@ -11,7 +12,7 @@ use libphonenumber\PhoneNumberUtil;
 
 //send donor confirmation message
 if (!function_exists('donorMessageResponse')){
-    function donorMessageResponse($account_no, $msisdn, $name, $amount, $my_total_contributions, $total_account_contributions){
+    function donorMessageResponse($channel, $account_no, $msisdn, $email, $name, $amount, $my_total_contributions, $total_account_contributions){
         $msg_to_donor = '';
         $project_name = '';
 
@@ -27,16 +28,21 @@ if (!function_exists('donorMessageResponse')){
 
         $new_msg =  str_replace($search, $replace, $msg_to_donor);
 
-        \App\Jobs\SendSms::dispatch([
-            'to' => $msisdn,
-            'message' => $new_msg
-        ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+        if ($channel == 'mpesa'){
+            SendSms::dispatch([
+                'to' => $msisdn,
+                'message' => $new_msg
+            ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+        } else {
+            // TODO send email
+            Log::channel('slack')->info($new_msg);
+        }
     }
 }
 
 //send treasurer confirmation message
 if (!function_exists('treasurerMessageResponse')){
-    function treasurerMessageResponse($account_no, $msisdn, $name, $amount, $my_total_contributions, $total_account_contributions){
+    function treasurerMessageResponse($channel, $account_no, $msisdn, $email, $name, $amount, $my_total_contributions, $total_account_contributions){
         $msg_to_treasurer = '';
         $project_name = '';
 
@@ -56,10 +62,15 @@ if (!function_exists('treasurerMessageResponse')){
         if ($account){
             $treasurers = $account->treasurers()->get();
             foreach ($treasurers as $treasurer){
-                \App\Jobs\SendSms::dispatch([
-                    'to' => $treasurer->user->msisdn,
-                    'message' => $new_msg
-                ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+                if ($channel == 'mpesa'){
+                    SendSms::dispatch([
+                        'to' => $treasurer->user->msisdn,
+                        'message' => $new_msg
+                    ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+                } else {
+                    // TODO send email
+                    Log::channel('slack')->info($new_msg);
+                }
             }
 
         }

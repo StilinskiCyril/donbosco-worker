@@ -9,6 +9,7 @@ use App\Models\Pledge;
 use App\Rules\ValidateMsisdn;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class HomeController extends Controller
 {
@@ -46,6 +47,10 @@ class HomeController extends Controller
     }
 
     // donate now
+
+    /**
+     * @throws \Throwable
+     */
     public function donateNow(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
@@ -64,16 +69,57 @@ class HomeController extends Controller
 
             return response()->json([
                 'status' => true,
+                'type' => 'text',
                 'message' => 'Safaricom M-pesa Stk Prompt Sent To '.$request->input('msisdn'). '. Enter M-pesa Pin On Your Phone To Make Your Donation'
             ]);
         } elseif ($request->input('payment_mode' == 'paypal')){
-            return response()->json([
-                'status' => true,
-                'message' => 'PayPal Integration Coming Soon...'
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $provider->getAccessToken();
+            $response = $provider->createOrder([
+                "intent" => "CAPTURE",
+                "application_context" => [
+                    "return_url" => route('paypal.success-transaction'),
+                    "cancel_url" => route('paypal.cancel-transaction'),
+                ],
+                "purchase_units" => [
+                    0 => [
+                        "reference_id" => $request->input('account_no'),
+                        "amount" => [
+                            "currency_code" => "KES",
+                            "value" => number_format($request->input('amount'), 2)
+                        ]
+                    ]
+                ]
             ]);
+
+            if (isset($response['id']) && $response['id'] != null) {
+                // redirect to approve href
+                foreach ($response['links'] as $links) {
+                    if ($links['rel'] == 'approve') {
+                        return response()->json([
+                            'status' => true,
+                            'type' => 'url',
+                            'message' => $links['href']
+                        ]);
+                    }
+                }
+                return response()->json([
+                    'status' => false,
+                    'type' => 'text',
+                    'message' => 'Something went wrong...'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'type' => 'text',
+                    'message' => $response['message'] ?? 'Something went wrong.'
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => true,
+                'type' => 'text',
                 'message' => 'Card Payment Integration Coming Soon...'
             ]);
         }

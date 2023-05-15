@@ -2,8 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Models\Account;
+use App\Models\Donation;
+use App\Models\Donor;
 use App\Models\MpesaAccessToken;
 use App\Models\PendingMpesaDonation;
+use App\Models\Pledge;
+use App\Models\UnknownDonation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -177,6 +182,98 @@ class ProcessTransaction implements ShouldQueue
             }
         } elseif ($channel == 'paypal') {
             // process paypal payment
+            $trans_id = $this->data['content']['id'];
+            $name = $this->data['content']['payer']['name']['given_name'] .' '.$this->data['content']['payer']['name']['surname'];
+            $email = $this->data['content']['payer']['email'];
+            $account_no = $this->data['content']['purchase_units'][0]['reference_id'];
+            $gross_amount = $this->data['content']['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['gross_amount']['value'];
+            $paypal_fee = $this->data['content']['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['paypal_fee']['value'];
+            $net_amount = $this->data['content']['purchase_units'][0]['payments']['captures'][0]['seller_receivable_breakdown']['net_amount']['value'];
+            $trans_time = $this->data['content']['purchase_units'][0]['payments']['captures'][0]['create_time'];
+
+            // extract the user info
+            $donors = Donor::where('email', $email)->first();
+            if (!$donors){
+                Donor::create([
+                    'name' => $name,
+                    'email' => $email,
+                    'account_no' => $account_no
+                ]);
+            }
+
+            /**
+             * Prioritize Pledge Donations
+             */
+            $pledge = Pledge::where('account_no', $account_no)->first();
+            if ($pledge){
+                Donation::create([
+                    'channel' => 'paypal',
+                    'trans_id' => $trans_id,
+                    'trans_time' => $trans_time,
+                    'amount' => $gross_amount,
+                    'business_short_code' => null,
+                    'account_no' => $account_no,
+                    'third_party_trans_id' => null,
+                    'msisdn' => null,
+                    'name' => $name,
+                    'ip' => $this->data['ip'],
+                    'charges' => $paypal_fee,
+                    'net' => $gross_amount - $paypal_fee
+                ]);
+                $my_total_contributions = Donation::where('account_no', $account_no)
+                    ->where('email', $email)->sum('amount');
+                $total_account_contributions = Donation::where('account_no', $account_no)->sum('amount');
+                //send donor message
+                donorMessageResponse($this->data['channel'], $account_no, null, $email, $name, $gross_amount, $my_total_contributions, $total_account_contributions);
+                //send treasurer message
+                treasurerMessageResponse($this->data['channel'], $account_no, null, $email, $name, $gross_amount, $my_total_contributions, $total_account_contributions);
+            } else {
+                /**
+                 * Account Donations
+                 */
+                $account = Account::where('account_no', $account_no)->first();
+                if ($account){
+                    Donation::create([
+                        'channel' => 'paypal',
+                        'trans_id' => $trans_id,
+                        'trans_time' => $trans_time,
+                        'amount' => $gross_amount,
+                        'business_short_code' => null,
+                        'account_no' => $account_no,
+                        'third_party_trans_id' => null,
+                        'msisdn' => null,
+                        'name' => $name,
+                        'ip' => $this->data['ip'],
+                        'charges' => $paypal_fee,
+                        'net' => $gross_amount - $paypal_fee
+                    ]);
+                    $my_total_contributions = Donation::where('account_no', $account_no)
+                        ->where('email', $email)->sum('amount');
+                    $total_account_contributions = Donation::where('account_no', $account_no)->sum('amount');
+                    //send first time donors an email
+                    $donations = Donation::where('email', $email)->count();
+                    if ($donations < 2){
+                        // TODO send email
+                        Log::channel('slack')->info("Thank you {$name} for your donation. If you would like to be a regular donor, click on the link below to register. https://sdb-mssc.donboscoshrine.com");
+                    }
+                    //send donor message
+                    donorMessageResponse($this->data['channel'], $account_no, null, $email, $name, $gross_amount, $my_total_contributions, $total_account_contributions);
+                    //send treasurer message
+                    treasurerMessageResponse($this->data['channel'], $account_no, null, $email, $name, $gross_amount, $my_total_contributions, $total_account_contributions);
+                } else {
+                    UnknownDonation::create([
+                        'channel' => 'paypal',
+                        'trans_id' => $trans_id,
+                        'trans_time' => $trans_time,
+                        'amount' => $net_amount,
+                        'email' => $email,
+                        'name' => $name,
+                        'account_no' => $account_no
+                    ]);
+                    // TODO send email
+                    Log::channel('slack')->info("$name, your donation of KES $gross_amount was received but it doesn't seem to match any account. A reconciliation will be done shortly.");
+                }
+            }
         } elseif ($channel == 'card') {
             // process card payment (stripe)
         }

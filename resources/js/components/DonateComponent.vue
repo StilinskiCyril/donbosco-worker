@@ -135,12 +135,14 @@ export default {
             };
             this.createForm.processing = true;
             axios.post(`/donate-now`, payLoad).then(response => {
-                if (response.data.status){
+                if (response.data.status && response.data.type === 'text'){
                     Swal.fire('Success!', response.data.message, 'success');
                     this.createForm.payment_mode = 'mpesa';
                     this.createForm.msisdn = undefined;
                     this.createForm.account_no = undefined;
                     this.createForm.amount = undefined;
+                } else if(response.data.status && response.data.type === 'url'){
+                    window.location.href = response.data.message
                 } else {
                     Swal.fire('Error!', response.data.message, 'error');
                 }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('account_no')->nullable()->unique();
             $table->string('third_party_trans_id')->nullable();
             $table->string('msisdn')->nullable();
+            $table->string('email')->nullable();
             $table->string('name')->nullable();
             $table->ipAddress('ip')->nullable();
             $table->double('charges')->nullable();
