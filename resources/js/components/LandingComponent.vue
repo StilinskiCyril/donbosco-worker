@@ -8,8 +8,8 @@
                             <img class="w-100" :src="'ui-kit2/assets/images/logo-5ed774920caab-1206x836.png'" alt="MSSC Logo">
                         </div>
                     </div>
-                    <div class="col-lg-3 offset-lg-1 mbr-form" data-form-type="formoid">
-                        <form class="mbr-form form-with-styler" data-form-title="Form Name">
+                    <div class="col-lg-3 offset-lg-1 mbr-form">
+                        <form class="mbr-form form-with-styler">
                             <div class="dragArea row">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <h1 class="mbr-section-title mb-4 display-2"><strong>Apply for a Pledge</strong></h1>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DonorsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\GroupController;
@@ -26,7 +27,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'landingPage'])->name('home.landing');
+Route::get('/', [HomeController::class, 'landingPage'])->name('home.landing-page');
+Route::get('donate', [HomeController::class, 'donatePage'])->name('home.donate-page');
+Route::post('donate-now', [HomeController::class, 'donateNow'])->name('home.donate-now');
 
 Auth::routes();
 
@@ -43,7 +46,7 @@ Route::middleware(['verified', 'auth'])->prefix('otp')->group(function () {
 Route::group([
     'middleware' => ['auth:web', 'two.factor.auth']
 ], function () {
-    Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
     Route::post('load-stats', [HomeController::class, 'loadStats'])->name('home.load-stats');
 

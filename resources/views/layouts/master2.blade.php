@@ -61,8 +61,8 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{{ route('home.landing') }}">Apply For a Pledge</a></li>
-                    <li class="nav-item"><a class="nav-link link text-black display-4" href="">Donate Now</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{{ route('home.landing-page') }}">Apply For a Pledge</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black display-4" href="{{ route('home.donate-page') }}">Donate Now</a></li>
                     @auth()
                     <li class="nav-item"><a class="nav-link link text-black display-4" href="{{ route('home.dashboard') }}">Dashboard</a></li>
                     @endauth

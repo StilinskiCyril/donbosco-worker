@@ -32,10 +32,41 @@ class HomeController extends Controller
         ]);
     }
 
-    // landing
+    // landing page
     public function landingPage()
     {
         return view('landing');
+    }
+
+    // donate page
+    public function donatePage()
+    {
+        return view('donate');
+    }
+
+    // donate now
+    public function donateNow(Request $request)
+    {
+        $request->validate([
+            'payment_mode' => ['required', 'string', Rule::in(['mpesa', 'paypal', 'card'])],
+            'msisdn' => [$request->input('payment_mode') == 'mpesa' ? 'required' : 'nullable', 'string', new ValidateMsisdn(false, true)],
+            'amount' => ['required', 'numeric', 'min:5']
+        ]);
+
+        if ($request->input('payment_mode') == 'mpesa'){
+            Stk
+            return response()->json([
+                'status' => true,
+                'message' => 'Safaricom M-pesa Stk Prompt Sent To '.$request->input('msisdn'). '. Enter M-pesa Pin On Your Phone To Make Your Donation'
+            ]);
+        } elseif ($request->input('payment_mode' == 'paypal')){
+
+        } else {
+            return response()->json([
+                'status' => true,
+                'message' => 'Card Payment Integration Coming Soon...'
+            ]);
+        }
     }
 
     // send sms page

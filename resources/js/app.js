@@ -40,6 +40,7 @@ import FundDistributionReportComponent from './components/FundDistributionReport
 import PledgeDonationsReportComponent from './components/PledgeDonationsReportComponent.vue';
 
 import LandingComponent from './components/LandingComponent.vue';
+import DonateComponent from './components/DonateComponent.vue';
 
 /**
  * Two-Factor Auth Component
@@ -67,6 +68,7 @@ app.component('fund-distribution-report-component', FundDistributionReportCompon
 app.component('pledge-donations-report-component', PledgeDonationsReportComponent);
 
 app.component('landing-component', LandingComponent);
+app.component('donate-component', DonateComponent);
 
 /**
  * Other Components
