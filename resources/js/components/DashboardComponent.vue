@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Today</p>
+                                <p class="mb-0 text-secondary">Today (KES)</p>
                                 <h4 class="my-1 text-info">{{ stats.donations_today }}</h4>
                                 <p class="mb-0 font-13">Total Donations</p>
                             </div>
@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">This Month</p>
+                                <p class="mb-0 text-secondary">This Month (KES)</p>
                                 <h4 class="my-1 text-danger">{{ stats.donations_this_month }}</h4>
                                 <p class="mb-0 font-13">Total Donations</p>
                             </div>
@@ -51,7 +51,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Total Donations</p>
+                                <p class="mb-0 text-secondary">Total Donations (KES)</p>
                                 <h4 class="my-1 text-warning">{{ stats.total_donations }}</h4>
                                 <p class="mb-0 font-13">From active projects</p>
                             </div>

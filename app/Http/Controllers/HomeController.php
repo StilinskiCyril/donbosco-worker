@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Jobs\MpesaStkPush;
 use App\Jobs\SendSms;
+use App\Models\Account;
+use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Pledge;
+use App\Models\Project;
+use App\Models\Stat;
+use App\Models\Treasurer;
 use App\Rules\ValidateMsisdn;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -22,15 +28,58 @@ class HomeController extends Controller
     // load stats
     public function loadStats(Request $request)
     {
-        // TODO return results based on roles
+        // return results based on roles
+        if ($request->user()->hasRole('super-admin') || $request->user()->hasRole('admin')) {
+            $donations_today = Stat::whereDate('created_at', Carbon::today())->sum('amount');
+            $donations_this_month = Stat::whereMonth('created_at', Carbon::now()->format('m'))->sum('amount');
+            $total_donations = Stat::sum('amount');
+            $donations_summary = Stat::selectRaw('SUM(amount) as monthly_sum')
+                ->whereYear('created_at', Carbon::now()->format('Y'))
+                ->groupBy('created_at')
+                ->orderBy('created_at', 'ASC')
+                ->pluck('monthly_sum')
+                ->toArray();
+            $projects_target = Project::sum('target_amount');
+            $balance = $projects_target - $total_donations;
+            $bitwise_revenue_share = (4.5/100) * $total_donations;
+        } elseif($request->user()->hasRole('treasurer')) {
+            $account_ids = Treasurer::where('user_id', $request->user()->id)->pluck('account_id');
+            $donations_today = Stat::whereDate('created_at', Carbon::today())->whereIn('account_id', $account_ids)->sum('amount');
+            $donations_this_month = Stat::whereMonth('created_at', Carbon::now()->format('m'))->whereIn('account_id', $account_ids)->sum('amount');
+            $total_donations = Stat::whereIn('account_id', $account_ids)->sum('amount');
+            $donations_summary = Stat::selectRaw('SUM(amount) as monthly_sum')
+                ->whereYear('created_at', Carbon::now()->format('Y'))
+                ->whereIn('account_id', $account_ids)
+                ->groupBy('created_at')
+                ->orderBy('created_at', 'ASC')
+                ->pluck('monthly_sum')
+                ->toArray();
+            $accounts_target = Account::whereIn('account_id', $account_ids)->sum('target_amount');
+            $balance = $accounts_target - $total_donations;
+            $bitwise_revenue_share = (4.5/100) * $total_donations;
+        } else{
+            $donations_today = Donation::whereDate('created_at', Carbon::today())->where('msisdn', $request->user()->msisdn)->sum('amount');
+            $donations_this_month = Donation::whereMonth('created_at', Carbon::now()->format('m'))->where('msisdn', $request->user()->msisdn)->sum('amount');
+            $total_donations = Donation::where('msisdn', $request->user()->msisdn)->sum('amount');
+            $donations_summary = Donation::selectRaw('SUM(amount) as monthly_sum')
+                ->whereYear('created_at', Carbon::now()->format('Y'))
+                ->where('msisdn', $request->user()->msisdn)
+                ->groupBy('created_at')
+                ->orderBy('created_at', 'ASC')
+                ->pluck('monthly_sum')
+                ->toArray();
+            $projects_target = Project::sum('target_amount');
+            $balance = $projects_target - $total_donations;
+            $bitwise_revenue_share = (4.5/100) * $total_donations;
+        }
         return response()->json([
-            'donations_today' => 20000,
-            'donations_this_month' => 268040,
+            'donations_today' => number_format($donations_today, 2),
+            'donations_this_month' => number_format($donations_this_month, 2),
             'active_projects' => 2,
-            'total_donations' => 14050800,
-            'donations_summary' => [76, 85, 101, 98, 87, 105, 91, 114, 94, 45, 87, 36],
-            'labels' => ['Total Donations', 'Balance', 'Administration Fees'],
-            'series' => [10000, 3000, 5000],
+            'total_donations' => number_format($total_donations, 2),
+            'donations_summary' => $donations_summary,
+            'labels' => ['Total Donations', 'Balance', 'Bitwise Revenue Share'],
+            'series' => [$total_donations, $balance, $bitwise_revenue_share]
         ]);
     }
 

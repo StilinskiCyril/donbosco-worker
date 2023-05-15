@@ -102,7 +102,7 @@ class ReportController extends Controller
         $start_date = Carbon::parse($request->input('start'))->startOfDay();
         $end_date = Carbon::parse($request->input('end'))->endOfDay();
 
-        $total_collected = Stat::whereBetween('created_at', [$start_date, $end_date])->sum('amount');
+        $total_collected = Stat::whereBetween('created_at', [$start_date, $end_date])->sum('net');
         $charges = Stat::whereBetween('created_at', [$start_date, $end_date])->sum('charges');
         $net_collected = $total_collected - $charges;
         $bitwise_revenue_share = (1.5/100) * $net_collected;
