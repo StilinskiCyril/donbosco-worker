@@ -55,16 +55,23 @@ class HomeController extends Controller
     {
         $request->validate([
             'payment_mode' => ['required', 'string', Rule::in(['mpesa', 'paypal', 'card'])],
+            'target_channel' => ['required', 'string', Rule::in(['other', 'pledge'])],
             'msisdn' => [$request->input('payment_mode') == 'mpesa' ? 'required' : 'nullable', 'string', new ValidateMsisdn(false, true)],
             'account_no' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:5']
         ]);
 
+        if ($request->input('target_channel') == 'pledge'){
+            $formatted_account_no = 'PL-'.$request->input('account_no');
+        } else {
+            $formatted_account_no = $request->input('account_no');
+        }
+
         if ($request->input('payment_mode') == 'mpesa'){
             MpesaStkPush::dispatch([
                 'amount' => $request->input('amount'),
                 'msisdn' => $request->input('msisdn'),
-                'account_no' => $request->input('account_no')
+                'account_no' => $formatted_account_no
             ])->onQueue('mpesa-stk-push')->onConnection('beanstalkd-worker001');
 
             return response()->json([
@@ -84,7 +91,7 @@ class HomeController extends Controller
                 ],
                 "purchase_units" => [
                     0 => [
-                        "reference_id" => $request->input('account_no'),
+                        "reference_id" => $formatted_account_no,
                         "amount" => [
                             "currency_code" => "KES",
                             "value" => number_format($request->input('amount'), 2)

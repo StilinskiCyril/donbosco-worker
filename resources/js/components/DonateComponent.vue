@@ -37,9 +37,17 @@
                                 </div>
 
                                 <div class="col-lg-12 col-md col-sm-12 form-group">
+                                    <label>Select Target Channel</label>
+                                    <select v-model="createForm.target_channel" class="form-control">
+                                        <option value="other">Other</option>
+                                        <option value="pledge">Pledge</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12 col-md col-sm-12 form-group">
                                     <label>Select Account</label>
                                     <select v-model="createForm.account_no" class="form-control">
-                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name +'---'+ account.account_no }}</option>
+                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name +' --- '+ account.account_no }}</option>
                                     </select>
                                 </div>
 
@@ -74,6 +82,7 @@ export default {
                 accounts: {},
                 createForm: {
                     payment_mode: 'mpesa',
+                    target_channel: 'other',
                     msisdn: undefined,
                     account_no: undefined,
                     amount: undefined,
@@ -115,6 +124,10 @@ export default {
                 Swal.fire('Error!', 'Phone/ Msisdn is required if payment mode is mpesa', 'warning');
                 return;
             }
+            if (!this.createForm.target_channel){
+                Swal.fire('Error!', 'Target channel is required', 'warning');
+                return;
+            }
             if (!this.createForm.account_no){
                 Swal.fire('Error!', 'Account No is required', 'warning');
                 return;
@@ -129,6 +142,7 @@ export default {
             }
             const payLoad = {
                 payment_mode: this.createForm.payment_mode,
+                target_channel: this.createForm.target_channel,
                 msisdn: this.createForm.msisdn,
                 account_no: this.createForm.account_no,
                 amount: this.createForm.amount,
@@ -138,6 +152,7 @@ export default {
                 if (response.data.status && response.data.type === 'text'){
                     Swal.fire('Success!', response.data.message, 'success');
                     this.createForm.payment_mode = 'mpesa';
+                    this.createForm.target_channel = 'other';
                     this.createForm.msisdn = undefined;
                     this.createForm.account_no = undefined;
                     this.createForm.amount = undefined;

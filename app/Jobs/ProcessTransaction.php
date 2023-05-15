@@ -45,7 +45,7 @@ class ProcessTransaction implements ShouldQueue
                 'trans_time' => Carbon::parse($this->data['content']['TransTime']),
                 'amount' => $this->data['content']['TransAmount'],
                 'msisdn' => $this->data['content']['MSISDN'],
-                'name' => $this->data['content']['FirstName'] .' '. $this->data['content']['LastName'],
+                'name' => $this->data['content']['FirstName'].' '.$this->data['content']['LastName'],
                 'account_no' => $this->data['content']['BillRefNumber'],
                 'business_short_code' => $this->data['content']['BusinessShortCode'],
                 'ip' => $this->data['ip']
@@ -98,12 +98,12 @@ class ProcessTransaction implements ShouldQueue
                                                 0 =>
                                                     array (
                                                         'Key' => 'DebitPartyName',
-                                                        'Value' => '254705799644 - CYRIL AGUVASU',
+                                                        'Value' => $this->data['content']['MSISDN'].' - '.$this->data['content']['FirstName'].' '.$this->data['content']['LastName'],
                                                     ),
                                                 1 =>
                                                     array (
                                                         'Key' => 'CreditPartyName',
-                                                        'Value' => '4077985 - BITWISE DIGITAL SOLUTIONS LTD 3',
+                                                        'Value' => $this->data['content']['BusinessShortCode'].' - BITWISE DIGITAL SOLUTIONS LTD 3',
                                                     ),
                                                 2 =>
                                                     array (
@@ -204,7 +204,7 @@ class ProcessTransaction implements ShouldQueue
             /**
              * Prioritize Pledge Donations
              */
-            $pledge = Pledge::where('account_no', $account_no)->first();
+            $pledge = Pledge::where('account_no', $account_no)->where('email', $email)->first();
             if ($pledge){
                 Donation::create([
                     'channel' => 'paypal',

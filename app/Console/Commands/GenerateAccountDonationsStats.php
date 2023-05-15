@@ -22,7 +22,7 @@ class GenerateAccountDonationsStats extends Command
      *
      * @var string
      */
-    protected $description = 'Generate Account Donation Stats';
+    protected $description = 'Generate Account Donation Stats {day?}';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class GenerateAccountDonationsStats extends Command
     public function handle()
     {
         $yesterday = today()->subDay();
-        $yesterday = $this->argument('day') ?: $yesterday;
+        $yesterday = $this->argument('day') ?: $this->ask('Enter Date', $yesterday);
 
         try {
             $yesterday = Carbon::parse($yesterday);

@@ -41,7 +41,6 @@ import PledgeDonationsReportComponent from './components/PledgeDonationsReportCo
 
 import LandingComponent from './components/LandingComponent.vue';
 import DonateComponent from './components/DonateComponent.vue';
-
 /**
  * Two-Factor Auth Component
  */

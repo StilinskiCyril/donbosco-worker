@@ -79,8 +79,8 @@ class ReportController extends Controller
         $request->validate([
             'project_uuid' => ['nullable', 'string'],
             'account_uuid' => ['nullable', 'string'],
-            'start' => ['required', 'date'],
-            'end' => ['required', 'date']
+            'start' => ['nullable', 'date'],
+            'end' => ['nullable', 'date']
         ]);
         return Donation::filter($request)->paginate(20);
     }
@@ -133,12 +133,14 @@ class ReportController extends Controller
         $request->validate([
             'frequency' => ['nullable', 'numeric'],
             'payment_status' => ['nullable', 'numeric'],
-            'start' => ['required', 'date'],
-            'end' => ['required', 'date']
+            'start' => ['nullable', 'date'],
+            'end' => ['nullable', 'date']
         ]);
 
-        return Pledge::filter(20)->paginate(20)->map(function($pledge) {
-            $amount_donated = Stat::where('account_no', $pledge->account_no)->sum('amount');
+        $pledges = Pledge::filter($request)->paginate(10);
+        $pledges->getCollection()->transform(function($pledge) {
+            $account_nos = Account::where('account_no', $pledge->account_no)->pluck('id');
+            $amount_donated = Stat::whereIn('account_no', $account_nos)->sum('amount');
             $pledge_target_amount = $pledge->target_amount;
             if ($pledge->frequency == 0){
                 $frequency = 'Once';
@@ -165,6 +167,7 @@ class ReportController extends Controller
                 'payment_status' => $pledge->payment_status
             ];
         });
+        return $pledges;
     }
 
     // pledge donations

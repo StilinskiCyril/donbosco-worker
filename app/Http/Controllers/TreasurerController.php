@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSms;
 use App\Models\Account;
 use App\Models\Treasurer;
 use App\Models\User;
@@ -25,7 +26,7 @@ class TreasurerController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string'],
-            'msisdn' => ['required', 'string', new ValidateMsisdn(true, 'User', 'msisdn', 'msisdn')],
+            'msisdn' => ['required', 'string', new ValidateMsisdn(true, false)],
             'email' => ['required', 'email', 'unique:users'],
         ]);
 
@@ -47,7 +48,7 @@ class TreasurerController extends Controller
             'account_id' => $account->id
         ]);
 
-        \App\Jobs\SendSms::dispatch([
+        SendSms::dispatch([
             'to' => $request->input('msisdn'),
             'message' => "{$request->input('name')}, Your treasurer email is {$request->input('email')} and your temporary password is $password. Log into your account at https://sdb-mssc.donboscoshrine.com"
         ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
@@ -63,7 +64,7 @@ class TreasurerController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string'],
-            'msisdn' => ['required', 'string', new ValidateMsisdn(false, 'User', 'msisdn', 'msisdn'), Rule::unique('users')->ignore($user->uuid, 'uuid')],
+            'msisdn' => ['required', 'string', new ValidateMsisdn(false), Rule::unique('users')->ignore($user->uuid, 'uuid')],
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->uuid, 'uuid')],
         ]);
 

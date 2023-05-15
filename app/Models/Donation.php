@@ -46,10 +46,10 @@ class Donation extends Model
             $q->where('trans_id', request('trans_id'));
         }
         if (!is_null(request('start')) && !empty(request('start'))) {
-            $q->where('trans_time', '>=', request('start'));
+            $q->whereDate('trans_time', '>=', request('start'));
         }
         if (!is_null(request('end')) && !empty(request('end'))) {
-            $q->where('trans_time', '<=', request('end'));
+            $q->whereDate('trans_time', '<=', request('end'));
         }
         if (!is_null(request('amount')) && !empty(request('amount'))) {
             $q->where('amount', request('amount'));

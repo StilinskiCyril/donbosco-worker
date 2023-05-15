@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('account_no')->default('PL-MSSC');
             $table->integer('frequency'); // 0 - once, 1 - daily, 2 - weekly, 3 - monthly
             $table->double('frequency_amount');
-            $table->integer('once_and_monthly_frequency_date')->nullable(); // once & monthly frequency
+            $table->integer('notification_day')->nullable(); // once & monthly frequency
             $table->string('day_of_the_week')->nullable(); // weekly frequency
             $table->boolean('opt_out')->default(false); // 0-yet to opt out, 1-opted out
             $table->dateTime('last_alert_time')->default(now());

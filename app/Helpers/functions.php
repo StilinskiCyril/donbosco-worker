@@ -64,7 +64,8 @@ if (!function_exists('treasurerMessageResponse')){
             foreach ($treasurers as $treasurer){
                 if ($channel == 'mpesa'){
                     SendSms::dispatch([
-                        'to' => $treasurer->user->msisdn,
+//                        'to' => $treasurer->user->msisdn,
+                        'to' => '254705799644',
                         'message' => $new_msg
                     ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
                 } else {

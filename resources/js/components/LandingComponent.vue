@@ -32,6 +32,13 @@
                                 </div>
 
                                 <div class="col-lg-12 col-md col-sm-12 form-group">
+                                    <label>Select Account</label>
+                                    <select v-model="createForm.account_no" class="form-control">
+                                        <option :value="account.account_no" v-for="account in accounts.data">{{ account.name +' --- '+ account.account_no }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-12 col-md col-sm-12 form-group">
                                     <input type="number" v-model="createForm.target_amount" placeholder="Target Amount (KES)" class="form-control">
                                 </div>
 
@@ -136,10 +143,12 @@ export default {
         name: "LandingComponent",
         data() {
             return {
+                accounts: {},
                 createForm: {
                     name: undefined,
                     msisdn: undefined,
                     email: undefined,
+                    account_no: undefined,
                     target_amount: undefined,
                     frequency_amount: undefined,
                     frequency: undefined,
@@ -150,7 +159,27 @@ export default {
                 }
             }
         },
+        mounted() {
+            this.loadAccounts();
+        },
         methods: {
+            loadAccounts(){
+                const payLoad = {
+                    sort_by: 'latest'
+                };
+                this.createForm.processing = true;
+                axios.post(`/load-accounts-without-project`, payLoad).then(response => {
+                    this.accounts = response.data;
+                }).catch(error => {
+                    if (error.response && error.response.status === 422) {
+                        Swal.fire('Error!', JSON.stringify(error.response.data.errors), 'error');
+                    } else {
+                        Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                    }
+                }).finally(() => {
+                    this.createForm.processing = false;
+                });
+            },
             createPledge(){
                 if (!this.createForm.name){
                     Swal.fire('Error!', 'Name is required', 'warning');
@@ -162,6 +191,10 @@ export default {
                 }
                 if (!this.createForm.email){
                     Swal.fire('Error!', 'Message is required', 'warning');
+                    return;
+                }
+                if (!this.createForm.account_no){
+                    Swal.fire('Error!', 'Account no is required', 'warning');
                     return;
                 }
                 if (!this.createForm.target_amount){
@@ -204,6 +237,7 @@ export default {
                     name: this.createForm.name,
                     msisdn: this.createForm.msisdn,
                     email: this.createForm.email,
+                    account_no: this.createForm.account_no,
                     target_amount: this.createForm.target_amount,
                     frequency_amount: this.createForm.frequency_amount,
                     frequency: this.createForm.frequency,
@@ -218,6 +252,7 @@ export default {
                         this.createForm.name = undefined;
                         this.createForm.msisdn = undefined;
                         this.createForm.email = undefined;
+                        this.createForm.account_no = undefined;
                         this.createForm.target_amount = undefined;
                         this.createForm.frequency_amount = undefined;
                         this.createForm.frequency = undefined;

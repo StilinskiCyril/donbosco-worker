@@ -17,8 +17,9 @@ class PledgeController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string'],
-            'msisdn' => ['required', new ValidateMsisdn(true, 'Pledge')],
+            'msisdn' => ['required', new ValidateMsisdn(true, false, 'Pledge')],
             'email' => ['required', 'email', 'unique:pledges'],
+            'account_no' => ['required', 'string'],
             'target_amount' => ['required', 'numeric', 'min:50'],
             'frequency_amount' => ['required', 'numeric', 'min:10', 'max:'.$request->input('target_amount')],
             'frequency' => ['required', 'string', Rule::in(['0', '1', '2', '3'])],
@@ -31,6 +32,7 @@ class PledgeController extends Controller
             'name' => $request->input('name'),
             'msisdn' => $request->input('msisdn'),
             'email' => $request->input('email'),
+            'account_no' => 'PL-'.$request->input('account_no'),
             'target_amount' => $request->input('target_amount'),
             'frequency_amount' => $request->input('frequency_amount'),
             'frequency' => $request->input('frequency'),

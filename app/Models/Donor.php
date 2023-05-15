@@ -32,7 +32,7 @@ class Donor extends Model
             $q->where('uuid', request('uuid'));
         }
         if (!is_null(request('name')) && !empty(request('name'))) {
-            $q->where('name', request('name'));
+            $q->where('name', 'like', '%'.request('name').'%');
         }
         if (!is_null(request('msisdn')) && !empty(request('msisdn'))) {
             $q->where('msisdn', request('msisdn'));

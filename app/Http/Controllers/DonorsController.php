@@ -21,7 +21,7 @@ class DonorsController extends Controller
     {
         $request->validate([
             'name' => ['nullable', 'string'],
-            'msisdn' => ['nullable', 'string', new ValidateMsisdn(false, 'Donor', 'msisdn', 'msisdn')],
+            'msisdn' => ['nullable', 'string', new ValidateMsisdn(false, false,'Donor', 'msisdn', 'msisdn')],
             'account_no' => ['nullable', 'string'],
             'start' => ['nullable', 'date'],
             'end' => ['nullable', 'date']

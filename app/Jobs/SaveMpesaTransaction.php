@@ -103,7 +103,7 @@ class SaveMpesaTransaction implements ShouldQueue
                 /**
                  * Prioritize Pledge Donations
                  */
-                $pledge = Pledge::where('account_no', $account_no)->first();
+                $pledge = Pledge::where('account_no', $account_no)->where('msisdn', $formatted_msisdn)->first();
                 if ($pledge){
                     Donation::create([
                         'channel' => 'mpesa',
@@ -180,7 +180,7 @@ class SaveMpesaTransaction implements ShouldQueue
                 }
                 //update that the transaction has been verified to be from m-pesa
                 $result->update([
-                    'resolved' => 1
+                    'status' => true
                 ]);
             } else {
                 Log::error('Transaction ID not found');

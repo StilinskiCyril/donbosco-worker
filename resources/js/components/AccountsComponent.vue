@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-12">
                                 <label for="message_to_donor" class="form-label">Message To Donor</label>
-                                <textarea class="form-control" v-model="createForm.message_to_donor" rows="4" placeholder="Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]. The Grand Total is KES [5]."></textarea>
+                                <textarea class="form-control" v-model="createForm.message_to_donor" rows="4" placeholder="Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]."></textarea>
                             </div>
                             <div class="col-12">
                                 <label for="message_to_treasurer" class="form-label">Message To Treasurer</label>
@@ -79,7 +79,7 @@
                 <div class="card border-top border-0 border-4 border-primary">
                     <div class="card-body p-5">
                         <h5>Sample Donor Message</h5>
-                        <p>Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]. The Grand Total is KES [5].</p>
+                        <p>Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3].</p>
                         <hr>
                         <h5>Sample Treasurer Message</h5>
                         <p>[1] has donated KES [2] towards [7] totaling KES [3]. New Grand Total is KES [5].</p>
@@ -188,7 +188,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="message_to_donor" class="form-label">Message To Donor</label>
-                                        <textarea class="form-control" v-model="updateForm.message_to_donor" rows="4" placeholder="Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]. The Grand Total is KES [5]."></textarea>
+                                        <textarea class="form-control" v-model="updateForm.message_to_donor" rows="4" placeholder="Thank you [1] for donating KES [2]  towards [7]. Your total donation is KES [3]."></textarea>
                                     </div>
                                     <div class="col-12">
                                         <label for="message_to_treasurer" class="form-label">Message To Treasurer</label>
@@ -228,7 +228,7 @@ import Swal from "sweetalert2";
                     account_no: undefined,
                     target_amount: undefined,
                     target_date: undefined,
-                    message_to_donor: "Thank you [1] for donating KES [2] towards [7]. Your total donation is KES [3]. The Grand Total is KES [5].",
+                    message_to_donor: "Thank you [1] for donating KES [2] towards [7]. Your total donation is KES [3].",
                     message_to_treasurer: "[1] has donated KES [2] towards [7] totaling KES [3]. New Grand Total is KES [5].",
                     processing: false
                 },

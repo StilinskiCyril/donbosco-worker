@@ -32,7 +32,7 @@ class AccountController extends Controller
         $message_to_donor = $request->input('message_to_donor');
         $message_to_treasurer = $request->input('message_to_treasurer');
 
-        if (!str_contains($message_to_donor, '[1]') OR !str_contains($message_to_donor, '[2]') OR !str_contains($message_to_donor, '[3]') OR !str_contains($message_to_donor, '[5]') OR !str_contains($message_to_donor, '[7]')) {
+        if (!str_contains($message_to_donor, '[1]') OR !str_contains($message_to_donor, '[2]') OR !str_contains($message_to_donor, '[3]') OR !str_contains($message_to_donor, '[7]')) {
             return response()->json([
                 'status' => false,
                 'message' => 'Incorrect message syntax for "Message To Donor". Kindly follow instructions on the message template draft'
@@ -92,7 +92,7 @@ class AccountController extends Controller
         $message_to_donor = $request->input('message_to_donor');
         $message_to_treasurer = $request->input('message_to_treasurer');
 
-        if (!str_contains($message_to_donor, '[1]') OR !str_contains($message_to_donor, '[2]') OR !str_contains($message_to_donor, '[3]') OR !str_contains($message_to_donor, '[5]') OR !str_contains($message_to_donor, '[7]')) {
+        if (!str_contains($message_to_donor, '[1]') OR !str_contains($message_to_donor, '[2]') OR !str_contains($message_to_donor, '[3]') OR !str_contains($message_to_donor, '[7]')) {
             return response()->json([
                 'status' => false,
                 'message' => 'Incorrect message syntax for "Message To Donor". Kindly follow instructions on the message template draft'

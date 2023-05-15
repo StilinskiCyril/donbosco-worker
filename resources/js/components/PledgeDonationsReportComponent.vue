@@ -140,16 +140,11 @@ import Swal from "sweetalert2";
                 offset: 10
             }
         },
+        mounted() {
+            this.filterDonations();
+        },
         methods: {
             filterDonations(){
-                if (!this.filterForm.start){
-                    Swal.fire('Error!', 'Start is required', 'warning');
-                    return;
-                }
-                if (!this.filterForm.end){
-                    Swal.fire('Error!', 'End is required', 'warning');
-                    return;
-                }
                 const payLoad = {
                     sort_by : 'latest',
                     frequency: this.filterForm.frequency,

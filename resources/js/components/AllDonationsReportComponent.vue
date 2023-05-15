@@ -119,6 +119,7 @@ import Swal from "sweetalert2";
         },
         mounted() {
             this.loadProjects();
+            this.filterDonations();
         },
         methods: {
             selectAccount(){
@@ -152,14 +153,6 @@ import Swal from "sweetalert2";
                 });
             },
             filterDonations(){
-                if (!this.filterForm.start){
-                    Swal.fire('Error!', 'Start is required', 'warning');
-                    return;
-                }
-                if (!this.filterForm.end){
-                    Swal.fire('Error!', 'End is required', 'warning');
-                    return;
-                }
                 const payLoad = {
                     sort_by : 'latest',
                     project_uuid: this.filterForm.project_uuid,
@@ -169,7 +162,7 @@ import Swal from "sweetalert2";
                 };
                 this.filterForm.processing = true;
                 axios.post(`generate-all-donations-report`, payLoad).then(response => {
-                    this.reports = response.data;
+                    this.pagination = response.data;
                 }).catch(error => {
                     //
                 }).finally(() => {
