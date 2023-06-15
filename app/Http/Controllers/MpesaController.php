@@ -132,6 +132,17 @@ class MpesaController extends Controller
         Log::channel('stklog')->info($content['Body']);
     }
 
+    // Lipa na C2B M-PESA password
+    public function lipaNaMpesaC2bPasswordActivity(): string
+    {
+        $lipa_time = Carbon::rawParse('now')->format('YmdHms');
+        $passkey = config('mpesa.c2b_passkey');
+        $BusinessShortCode = config('mpesa.business_shortcode');
+        $timestamp = $lipa_time;
+        return base64_encode($BusinessShortCode.$passkey.$timestamp);
+    }
+
+
     // manage groups page
     public function managePage(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
