@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('msisdn')->nullable();
             $table->string('email')->nullable();
-            $table->string('account_no')->nullable();
+            $table->foreign('account_no')->references('account_no')->on('accounts')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
