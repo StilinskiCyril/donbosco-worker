@@ -819,12 +819,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:StilinskiCyril/donbosco-utils.git",
-                "reference": "71830e997021602b5df5d7c9823684221464942a"
+                "reference": "10269d66ce7b3c4860ce845538a5e9408b102f1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/StilinskiCyril/donbosco-utils/zipball/71830e997021602b5df5d7c9823684221464942a",
-                "reference": "71830e997021602b5df5d7c9823684221464942a",
+                "url": "https://api.github.com/repos/StilinskiCyril/donbosco-utils/zipball/10269d66ce7b3c4860ce845538a5e9408b102f1b",
+                "reference": "10269d66ce7b3c4860ce845538a5e9408b102f1b",
                 "shasum": ""
             },
             "require": {
@@ -860,12 +860,12 @@
                 }
             ],
             "description": "The official library for DONBOSCO",
-            "homepage": "https://github.com/mobilesasa/donbosco-utils",
+            "homepage": "https://github.com/StilinskiCyril/donbosco-utils",
             "support": {
-                "source": "https://github.com/mobilesasa/donbosco-utils",
-                "issues": "https://github.com/mobilesasa/donbosco-utils/issues"
+                "source": "https://github.com/StilinskiCyril/donbosco-utils",
+                "issues": "https://github.com/StilinskiCyril/donbosco-utils/issues"
             },
-            "time": "2023-09-05T12:30:23+00:00"
+            "time": "2023-09-05T14:48:34+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -1722,16 +1722,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v10.21.1",
+            "version": "v10.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "ae93199f5349fd8a02364424249aad2a90185a95"
+                "reference": "9234388a895206d4e1df37342b61adc67e5c5d31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/ae93199f5349fd8a02364424249aad2a90185a95",
-                "reference": "ae93199f5349fd8a02364424249aad2a90185a95",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9234388a895206d4e1df37342b61adc67e5c5d31",
+                "reference": "9234388a895206d4e1df37342b61adc67e5c5d31",
                 "shasum": ""
             },
             "require": {
@@ -1918,7 +1918,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2023-09-04T14:34:36+00:00"
+            "time": "2023-09-05T13:20:01+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -7308,16 +7308,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.12.0",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "08bcf51e520a5e5aea458fc600ac4869f6934a66"
+                "reference": "a19bd99c91b158f33a4c5ffe9653d17a921424de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/08bcf51e520a5e5aea458fc600ac4869f6934a66",
-                "reference": "08bcf51e520a5e5aea458fc600ac4869f6934a66",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/a19bd99c91b158f33a4c5ffe9653d17a921424de",
+                "reference": "a19bd99c91b158f33a4c5ffe9653d17a921424de",
                 "shasum": ""
             },
             "require": {
@@ -7370,20 +7370,20 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2023-08-30T07:53:32+00:00"
+            "time": "2023-09-05T15:45:33+00:00"
         },
         {
             "name": "laravel/sail",
-            "version": "v1.24.0",
+            "version": "v1.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "c8a621d7b69ab2e568d97a20f837ca733a224006"
+                "reference": "3a373bb2845623aed2017c672dc61c84ae974890"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/c8a621d7b69ab2e568d97a20f837ca733a224006",
-                "reference": "c8a621d7b69ab2e568d97a20f837ca733a224006",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/3a373bb2845623aed2017c672dc61c84ae974890",
+                "reference": "3a373bb2845623aed2017c672dc61c84ae974890",
                 "shasum": ""
             },
             "require": {
@@ -7435,7 +7435,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2023-08-27T14:26:11+00:00"
+            "time": "2023-09-01T14:05:17+00:00"
         },
         {
             "name": "mockery/mockery",
