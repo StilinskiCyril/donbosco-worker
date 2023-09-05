@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Models\Account;
-use App\Models\Donation;
-use App\Models\Donor;
-use App\Models\MpesaAccessToken;
-use App\Models\PendingMpesaDonation;
-use App\Models\Pledge;
-use App\Models\UnknownDonation;
+use Donbosco\App\Models\Account;
+use Donbosco\App\Models\Donation;
+use Donbosco\App\Models\Donor;
+use Donbosco\App\Models\MpesaAccessToken;
+use Donbosco\App\Models\PendingMpesaDonation;
+use Donbosco\App\Models\Pledge;
+use Donbosco\App\Models\UnknownDonation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,6 +18,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Exception;
 
 class ProcessTransaction implements ShouldQueue
 {
@@ -69,8 +70,8 @@ class ProcessTransaction implements ShouldQueue
                     'TransactionID' => $this->data['content']['TransID'],
                     'PartyA' => config('mpesa.business_shortcode'),
                     'IdentifierType' => 4,
-                    'ResultURL' => url('api/v1/c2b/transaction-check/callback'),
-                    'QueueTimeOutURL' =>  url('api/v1/c2b/transaction-check/timeout'),
+                    'ResultURL' => env('DONBOSCO_WEB_TRANSACTION_CHECK_URL'),
+                    'QueueTimeOutURL' =>  env('DONBOSCO_WEB_TRANSACTION_CHECK_TIMEOUT_URL'),
                     'Remarks' => 'Transaction Check',
                     'Occassion' => 'Transaction Check'
                 ]));
@@ -167,17 +168,21 @@ class ProcessTransaction implements ShouldQueue
                                     ),
                             ),
                     );
-                    $response = $client->request('POST', route('mpesa.transaction-check'), [
-                        'json' => $payload,
-                        'headers' => [
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                        ],
-                    ]);
-                    $response_data = $response->getBody()->getContents();
-                    Log::info('FAKE LOCAL TRANSACTION CHECK CALLBACK '.$response_data);
-                    $formatted_response = json_decode($response_data);
+                    try {
+                        $response = $client->request('POST', env('DONBOSCO_WEB_TRANSACTION_CHECK_URL'), [
+                            'json' => $payload,
+                            'headers' => [
+                                'Accept' => 'application/json',
+                                'Content-Type' => 'application/json',
+                            ],
+                        ]);
+//                        $donbosco_web_transaction_check_api_response = $response->getBody()->getContents();
+//                        $formatted_response = json_decode($donbosco_web_transaction_check_api_response);
+                    } catch (Exception $e){
+                        Log::info($e->getMessage());
+                    }
                 } catch (\Exception $e){
+                    Log::info($e->getMessage());
                 }
             }
         } elseif ($channel == 'paypal') {
