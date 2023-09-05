@@ -8,6 +8,7 @@
         "php": "^8.1",
         "ext-curl": "*",
         "ext-openssl": "*",
+        "aguva/donbosco-utils": "dev-main",
         "barryvdh/laravel-debugbar": "^3.8",
         "doctrine/dbal": "^3.6",
         "giggsey/libphonenumber-for-php": "^8.13",
@@ -19,8 +20,7 @@
         "maatwebsite/excel": "^3.1",
         "pda/pheanstalk": "^4.0",
         "spatie/laravel-permission": "^5.10",
-        "srmklive/paypal": "^3.0",
-        "donbosco/utils": "dev-main"
+        "srmklive/paypal": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

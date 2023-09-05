@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b5d1e52cdc399e2c65a896480fdd3b4",
+    "content-hash": "6d7d9bf14603a0c64e9d0a07966dc9f4",
     "packages": [
+        {
+            "name": "aguva/donbosco-utils",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:StilinskiCyril/donbosco-utils.git",
+                "reference": "ce793fe8ee1a245948b2951b803f1edb864f59ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/StilinskiCyril/donbosco-utils/zipball/ce793fe8ee1a245948b2951b803f1edb864f59ba",
+                "reference": "ce793fe8ee1a245948b2951b803f1edb864f59ba",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "giggsey/libphonenumber-for-php": "^8.13",
+                "pda/pheanstalk": "^4.0",
+                "php": "^8.1"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Donbosco\\App\\Providers\\DonboscoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Donbosco\\App\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cyril Aguvasu",
+                    "email": "aguvasucyril@gmail.com"
+                }
+            ],
+            "description": "The official library for donbosco",
+            "homepage": "https://github.com/StilinskiCyril/donbosco-utils",
+            "support": {
+                "source": "https://github.com/StilinskiCyril/donbosco-utils",
+                "issues": "https://github.com/StilinskiCyril/donbosco-utils/issues"
+            },
+            "time": "2023-09-05T17:15:12+00:00"
+        },
         {
             "name": "barryvdh/laravel-debugbar",
             "version": "v3.9.2",
@@ -812,60 +866,6 @@
                 }
             ],
             "time": "2022-12-15T16:57:16+00:00"
-        },
-        {
-            "name": "donbosco/utils",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:StilinskiCyril/donbosco-utils.git",
-                "reference": "10269d66ce7b3c4860ce845538a5e9408b102f1b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/StilinskiCyril/donbosco-utils/zipball/10269d66ce7b3c4860ce845538a5e9408b102f1b",
-                "reference": "10269d66ce7b3c4860ce845538a5e9408b102f1b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "giggsey/libphonenumber-for-php": "^8.13",
-                "pda/pheanstalk": "^4.0",
-                "php": "^8.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Donbosco\\App\\Providers\\DonboscoServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Donbosco\\App\\": "src"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cyril Aguvasu",
-                    "email": "aguvasucyril@gmail.com"
-                }
-            ],
-            "description": "The official library for DONBOSCO",
-            "homepage": "https://github.com/StilinskiCyril/donbosco-utils",
-            "support": {
-                "source": "https://github.com/StilinskiCyril/donbosco-utils",
-                "issues": "https://github.com/StilinskiCyril/donbosco-utils/issues"
-            },
-            "time": "2023-09-05T14:48:34+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -9554,7 +9554,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "donbosco/utils": 20
+        "aguva/donbosco-utils": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

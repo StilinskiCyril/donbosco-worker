@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
-use Donbosco\App\Models\Account;
-use Donbosco\App\Models\Donation;
-use Donbosco\App\Models\Donor;
-use Donbosco\App\Models\MpesaAccessToken;
-use Donbosco\App\Models\PendingMpesaDonation;
-use Donbosco\App\Models\Pledge;
-use Donbosco\App\Models\UnknownDonation;
+use App\Models\Account;
+use App\Models\Donation;
+use App\Models\Donor;
+use App\Models\MpesaAccessToken;
+use App\Models\PendingMpesaDonation;
+use App\Models\Pledge;
+use App\Models\UnknownDonation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
