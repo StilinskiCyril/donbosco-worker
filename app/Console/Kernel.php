@@ -13,10 +13,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('app:refresh-mpesa-access-tokens')->everyThirtyMinutes();
-        $schedule->command('app:send-pledges-notifications')->dailyAt('09:00');
-        $schedule->command('app:reset-pledge-mpesa-stk-count')->daily();
-        $schedule->command('app:generate-account-donations-stats')->dailyAt('00:05');
+        $schedule->command('generate-donations-stats')->everyTwoHours();
+        $schedule->command('refresh-mobilesasa-balance')->everyThreeMinutes();
+        $schedule->command('refresh-mpesa-access-token')->hourly();
+        $schedule->command('reset-pledge-mpesa-stk-count')->daily();
+        $schedule->command('send-pledges-notifications')->dailyAt('09:00');
     }
 
     /**
