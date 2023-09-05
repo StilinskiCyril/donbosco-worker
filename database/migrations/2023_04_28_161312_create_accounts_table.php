@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('account_no')->unique();
             $table->text('description');
             $table->double('target_amount');
+            $table->double('amount_donated')->default(0); // updated in intervals by custom commands
+            $table->double('balance')->nullable(); // updated in intervals by custom commands
+            $table->integer('total_donors')->default(0); // updated in intervals by custom commands (query unique instances)
+            $table->integer('total_donations')->default(0); // updated in intervals by custom commands (query unique instances)
             $table->dateTime('target_date');
             $table->text('message_to_donor');
             $table->text('message_to_treasurer');

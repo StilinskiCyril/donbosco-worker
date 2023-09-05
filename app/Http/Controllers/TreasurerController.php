@@ -26,32 +26,67 @@ class TreasurerController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string'],
-            'msisdn' => ['required', 'string', new ValidateMsisdn(true, false)],
-            'email' => ['required', 'email', 'unique:users'],
+            'msisdn' => ['required', 'string', new ValidateMsisdn(false, false)],
+            'email' => ['required', 'email', 'max:255']
         ]);
 
-        $password = generatePin();
-        $user = User::create([
-            'name' => $request->input('name'),
-            'msisdn' => $request->input('msisdn'),
-            'msisdn_verified_at' => now(),
-            'email' => $request->input('email'),
-            'email_verified_at' => now(),
-            'password' => Hash::make($password),
-            'remember_token' => Str::random(10),
-        ]);
+        if ($request->input('msisdn') == $request->user()->msisdn || $request->input('email') == $request->user()->email){
+            return response()->json([
+                'status' => false,
+                'message' => 'Sorry, you can\'t add yourself as a treasurer'
+            ]);
+        }
 
-        $user->assignRole('treasurer');
+        // check if user exists
+        $existing_user = User::where('msisdn', $request->input('msisdn'))
+            ->Orwhere('email', $request->input('email'))->first();
+        if (!$existing_user){
+            $password = generatePin();
+            $user = User::create([
+                'name' => $request->input('name'),
+                'msisdn' => $request->input('msisdn'),
+                'msisdn_verified_at' => now(),
+                'email' => $request->input('email'),
+                'email_verified_at' => now(),
+                'password' => Hash::make($password)
+            ]);
+            $user->assignRole('treasurer');
+            $new_user_id = $user->id;
 
-        Treasurer::create([
-            'user_id' => $user->id,
-            'account_id' => $account->id
-        ]);
+            Treasurer::create([
+                'user_id' => $new_user_id,
+                'account_id' => $account->id
+            ]);
 
-        SendSms::dispatch([
-            'to' => $request->input('msisdn'),
-            'message' => "{$request->input('name')}, Your treasurer email is {$request->input('email')} and your temporary password is $password. Log into your account at https://sdb-mssc.donboscoshrine.com"
-        ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+            SendSms::dispatch([
+                'to' => $user->msisdn,
+                'message' => "You have been added as a treasurer to the fundraiser account ($account->name). Your treasurer email is {$request->input('email')} and your temporary password is $password. Log into your account at ".env('APP_URL')
+            ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+        } else {
+            $new_user_id = $existing_user->id;
+
+            $treasurer = Treasurer::where('user_id', $new_user_id)->where('account_id', $account->id)->first();
+            if (!$treasurer){
+                Treasurer::create([
+                    'user_id' => $new_user_id,
+                    'account_id' => $account->id
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Treasurer {$request->input('name')} already added for account $account->name"
+                ]);
+            }
+
+            if (!$existing_user->hasRole('treasurer')){
+                $existing_user->assignRole('treasurer');
+            }
+
+            SendSms::dispatch([
+                'to' => $existing_user->msisdn,
+                'message' => "You have been added as a treasurer to the fundraiser account ($account->name). Your treasurer email is {$request->input('email')} and your temporary password is $password. Log into your account at ".env('APP_URL')
+            ])->onQueue('send-sms')->onConnection('beanstalkd-worker001');
+        }
 
         return response()->json([
             'status' => true,

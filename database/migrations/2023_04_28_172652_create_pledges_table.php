@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->string('name');
-            $table->string('msisdn');
+            $table->string('msisdn', 12);
             $table->string('email');
             $table->double('target_amount');
             $table->dateTime('target_date');

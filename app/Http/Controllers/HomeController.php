@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function loadStats(Request $request)
     {
         // return results based on roles
-        if ($request->user()->hasRole('super-admin') || $request->user()->hasRole('admin')) {
+        if ($request->user()->hasRole('admin')) {
             $donations_today = Stat::whereDate('created_at', Carbon::today())->sum('amount');
             $donations_this_month = Stat::whereMonth('created_at', Carbon::now()->format('m'))->sum('amount');
             $total_donations = Stat::sum('amount');
@@ -54,7 +54,7 @@ class HomeController extends Controller
                 ->orderBy('created_at', 'ASC')
                 ->pluck('monthly_sum')
                 ->toArray();
-            $accounts_target = Account::whereIn('account_id', $account_ids)->sum('target_amount');
+            $accounts_target = Account::whereIn('id', $account_ids)->sum('target_amount');
             $balance = $accounts_target - $total_donations;
             $bitwise_revenue_share = (4.5/100) * $total_donations;
         } else{
@@ -75,7 +75,7 @@ class HomeController extends Controller
         return response()->json([
             'donations_today' => number_format($donations_today, 2),
             'donations_this_month' => number_format($donations_this_month, 2),
-            'active_projects' => 2,
+            'active_projects' => Project::all()->count(),
             'total_donations' => number_format($total_donations, 2),
             'donations_summary' => $donations_summary,
             'labels' => ['Total Donations', 'Balance', 'Bitwise Revenue Share'],

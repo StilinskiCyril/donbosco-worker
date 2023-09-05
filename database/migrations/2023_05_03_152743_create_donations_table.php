@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('business_short_code')->nullable();
             $table->string('account_no')->nullable();
             $table->string('third_party_trans_id')->nullable();
-            $table->string('msisdn')->nullable();
+            $table->string('msisdn', 12)->nullable();
             $table->string('email')->nullable();
             $table->string('name')->nullable();
             $table->ipAddress('ip')->nullable();

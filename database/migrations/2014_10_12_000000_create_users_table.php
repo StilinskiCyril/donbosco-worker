@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->string('name');
-            $table->string('msisdn')->unique();
+            $table->string('msisdn', 12)->unique();
             $table->timestamp('msisdn_verified_at')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

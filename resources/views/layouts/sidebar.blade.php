@@ -18,7 +18,7 @@
                 <div class="menu-title">Dashboard</div>
             </a>
         </li>
-        @role(['admin', 'super-admin'])
+        @role(['admin'])
         <li>
             <a href="{{ route('project.manage-page') }}">
                 <div class="parent-icon">
@@ -79,7 +79,7 @@
             </a>
         </li>
         @endrole
-        @role(['super-admin'])
+        @role(['admin'])
         <li>
             <a href="javascript: void(0);">
                 <div class="parent-icon">
@@ -89,7 +89,7 @@
             </a>
         </li>
         @endrole
-        @role(['admin', 'super-admin', 'treasurer'])
+        @role(['admin', 'treasurer'])
         <li>
             <a href="{{ route('donor.manage-page') }}">
                 <div class="parent-icon">
@@ -113,21 +113,5 @@
             </ul>
         </li>
         @endrole
-        <li>
-            <a href="javascript: void(0);">
-                <div class="parent-icon">
-                    <i class='bx bxl-paypal'></i>
-                </div>
-                <div class="menu-title">Manage Cards</div>
-            </a>
-        </li>
-        <li>
-            <a href="tel:254705799644">
-                <div class="parent-icon">
-                    <i class='bx bx-support'></i>
-                </div>
-                <div class="menu-title">Call Us Now</div>
-            </a>
-        </li>
     </ul>
 </div>

@@ -21,7 +21,7 @@
                                     <td>{{ project.target_amount }}</td>
                                     <td>{{ project.amount_donated }}</td>
                                     <td>{{ project.balance }}</td>
-                                    <td>{{ project.donations_against_project_target }} %</td>
+                                    <td>{{ (project.amount_donated/project.target_amount) * 100 }} %</td>
                                 </tr>
                                 </tbody>
                             </table>

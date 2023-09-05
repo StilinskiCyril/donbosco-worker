@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('trans_id')->nullable()->unique();
             $table->dateTime('trans_time')->nullable();
             $table->double('amount')->nullable();
-            $table->string('msisdn')->nullable();
+            $table->string('msisdn', 12)->nullable();
             $table->string('name')->nullable();
             $table->string('account_no')->nullable();
             $table->boolean('status')->default(false); // 0 pending, 1 resolved

@@ -53,18 +53,7 @@ class ReportController extends Controller
 
     public function projectDonationsReport(Request $request)
     {
-        return Project::filter($request)->get()->map(function($project) {
-            $amount_donated = Donation::sum('amount');
-            $project_target_amount = $project->target_amount;
-            return [
-                'uuid' => $project->uuid,
-                'name' => $project->name,
-                'target_amount' => number_format($project_target_amount, 2),
-                'amount_donated' => number_format($amount_donated, 2),
-                'balance' => number_format($project_target_amount - $amount_donated, 2),
-                'donations_against_project_target' => ($amount_donated/$project_target_amount) * 100
-            ];
-        });
+        return Project::filter($request)->paginate(30);
     }
 
     // all donations manage page

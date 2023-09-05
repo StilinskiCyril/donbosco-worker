@@ -26,7 +26,7 @@ class DonorsController extends Controller
             'start' => ['nullable', 'date'],
             'end' => ['nullable', 'date']
         ]);
-        if ($request->user()->hasRole('super-admin') || $request->user()->hasRole('admin')) {
+        if ($request->user()->hasRole('admin')) {
             return Donor::filter($request)->paginate(20);
         } else{
             $account_ids = $request->user()->treasurer()->pluck('account_id');

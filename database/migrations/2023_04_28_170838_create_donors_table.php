@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('donors', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('name')->nullable();
-            $table->string('msisdn')->nullable();
-            $table->string('email')->nullable();
-            $table->foreign('account_no')->references('account_no')->on('accounts')->cascadeOnDelete();
+            $table->string('name');
+            $table->string('msisdn', 12)->nullable()->unique();
+            $table->string('email')->nullable()->unique();
+            $table->string('account_no');
             $table->softDeletes();
             $table->timestamps();
         });

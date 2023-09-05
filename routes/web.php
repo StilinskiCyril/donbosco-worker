@@ -51,7 +51,7 @@ Route::group([
     Route::get('dashboard', [HomeController::class, 'dashboardPage'])->name('home.dashboard');
     Route::post('load-stats', [HomeController::class, 'loadStats'])->name('home.load-stats');
 
-    Route::middleware(['role:admin|super-admin|treasurer'])->group(function(){
+    Route::middleware(['role:admin|treasurer'])->group(function(){
         /**
          * Manage Donors
          */
@@ -60,7 +60,7 @@ Route::group([
     });
 
     // admin routes
-    Route::middleware(['role:admin|super-admin'])->group(function(){
+    Route::middleware(['role:admin'])->group(function(){
         /**
          * Manage Projects
          */
