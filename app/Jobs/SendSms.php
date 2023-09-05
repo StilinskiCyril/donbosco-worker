@@ -30,24 +30,25 @@ class SendSms implements ShouldQueue
     public function handle(): void
     {
         //send the message
-        try {
-            $client = new Client();
-            $response = $client->request('POST', 'https://api.mobilesasa.com/v1/send/message', [
-                'form_params' => [
-                    'senderID' => config('mobilesasa.senderID'),
-                    'phone' => $this->data['to'],
-                    'message' => $this->data['message']
-                ],
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Bearer ' . config('mobilesasa.bearer_token'),
-                ],
-            ]);
-            $response_data = $response->getBody()->getContents();
-            Log::info($response_data);
-            $formatted_response = json_decode($response_data);
-        } catch (\Exception $e){
-        }
+//        try {
+//            $client = new Client();
+//            $response = $client->request('POST', 'https://api.mobilesasa.com/v1/send/message', [
+//                'form_params' => [
+//                    'senderID' => config('mobilesasa.senderID'),
+//                    'phone' => $this->data['to'],
+//                    'message' => $this->data['message']
+//                ],
+//                'headers' => [
+//                    'Accept' => 'application/json',
+//                    'Content-Type' => 'application/x-www-form-urlencoded',
+//                    'Authorization' => 'Bearer ' . config('mobilesasa.bearer_token'),
+//                ],
+//            ]);
+//            $response_data = $response->getBody()->getContents();
+//            Log::info($response_data);
+//            $formatted_response = json_decode($response_data);
+//        } catch (\Exception $e){
+//            Log::info($e->getMessage());
+//        }
     }
 }
