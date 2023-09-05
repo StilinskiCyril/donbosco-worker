@@ -6,7 +6,6 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
-import VueApexCharts from "vue3-apexcharts";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -16,58 +15,15 @@ import VueApexCharts from "vue3-apexcharts";
 
 const app = createApp({});
 
-app.use(VueApexCharts);
-
 /**
  * Component Imports
  */
 import ExampleComponent from './components/ExampleComponent.vue';
-import TwoFactorAuthComponent from './components/TwoFactorAuthComponent.vue';
-import DashboardComponent from './components/DashboardComponent.vue';
-import ProjectsComponent from './components/ProjectsComponent.vue';
-import AccountsComponent from './components/AccountsComponent.vue';
-import TreasurersComponent from './components/TreasurersComponent.vue';
-import DonorsComponent from './components/DonorsComponent.vue';
-import GroupsComponent from './components/GroupsComponent.vue';
-import SubGroupsComponent from './components/SubGroupsComponent.vue';
-import ExpensesComponent from './components/ExpensesComponent.vue';
-import UnknownDonationsComponent from './components/UnknownDonationsComponent.vue';
-import SendSmsComponent from './components/SendSmsComponent.vue';
-import AccountDonationsReportComponent from './components/AccountDonationsReportComponent.vue';
-import ProjectDonationsReportComponent from './components/ProjectDonationsReportComponent.vue';
-import AllDonationsReportComponent from './components/AllDonationsReportComponent.vue';
-import FundDistributionReportComponent from './components/FundDistributionReportComponent.vue';
-import PledgeDonationsReportComponent from './components/PledgeDonationsReportComponent.vue';
-
-import LandingComponent from './components/LandingComponent.vue';
-import DonateComponent from './components/DonateComponent.vue';
-/**
- * Two-Factor Auth Component
- */
-app.component('two-factor-auth-component', TwoFactorAuthComponent);
 
 /**
  * Dashboard Components
  */
 app.component('example-component', ExampleComponent);
-app.component('dashboard-component', DashboardComponent);
-app.component('projects-component', ProjectsComponent);
-app.component('accounts-component', AccountsComponent);
-app.component('treasurers-component', TreasurersComponent);
-app.component('donors-component', DonorsComponent);
-app.component('groups-component', GroupsComponent);
-app.component('sub-groups-component', SubGroupsComponent);
-app.component('expenses-component', ExpensesComponent);
-app.component('unknown-donations-component', UnknownDonationsComponent);
-app.component('send-sms-component', SendSmsComponent);
-app.component('account-donations-report-component', AccountDonationsReportComponent);
-app.component('project-donations-report-component', ProjectDonationsReportComponent);
-app.component('all-donations-report-component', AllDonationsReportComponent);
-app.component('fund-distribution-report-component', FundDistributionReportComponent);
-app.component('pledge-donations-report-component', PledgeDonationsReportComponent);
-
-app.component('landing-component', LandingComponent);
-app.component('donate-component', DonateComponent);
 
 /**
  * Other Components
